@@ -1,0 +1,86 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Auth extends CI_Controller {
+
+	public function login()
+	{
+		$this->load->view('login');
+	}
+
+	public function random_string(){
+		$random = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"), 0, 5);
+		return $random;
+	}
+
+	public function register(){
+
+		$this->load->library('email');
+	    $this->config->load('email'); // load config.php di config folder
+
+	    $config = $this->config->item('email'); //load return response dari config class by array key
+
+	    $this->email->initialize($config);
+	    $this->email->set_newline("\r\n");
+	    $this->email->from('cs@simpleplan.com', 'Simple Plan');
+	    $this->email->to($this->input->post('email'));
+	    $this->email->subject('Registrasi Akun Simple Plan');
+
+		$postData = xssPrevent($this->input->post());
+		$post = array_merge($postData, array('kode_otp' => $this->random_string()));
+
+	    $data = array('post_data' => $post);
+	    $this->email->message($this->load->view('email/register', $data, true));
+
+
+	    if ($this->email->send()){
+
+	    	$this->load->model('M_auth');
+
+	    	$save_user = $this->M_auth->save_user($post);
+	    	$save_to_log = $this->M_auth->save_log_confirmation($post);
+
+	    	$this->session->set_flashdata('message', '<div class="alert alert-info" role="alert">Selamat, anda telah berhasil registrasi, Silakan buka email dan masukan kode verifikasi yang dikirim ke amail anda.</div><div class="alert alert-warning" role="alert">Kode verifikasi hanya valid selama 10 Menit setelah registrasi.</div>');
+
+         	redirect('auth/confirmation_page');
+
+	    }         
+	    else{
+	        show_error($this->email->print_debugger());
+	    }
+
+	}
+
+	public function confirmation_page(){
+
+		$this->load->view('confirmation');
+
+	}
+
+	public function submit_confirmation(){
+
+		$this->load->model('M_auth');
+
+		$email = $this->input->post('email');
+		$otp = $this->input->post('otp');
+
+		$check = $this->M_auth->check_valid_time($email, $otp);
+
+		if($check->num_rows() === 0){
+
+			$this->session->set_flashdata("message", "<div class='alert alert-warning' role='alert'>Verifikasi Gagal, pastikan kode OTP sudah sesuai</div>");
+
+			redirect("auth/confirmation_page");
+
+		}else{
+
+			$this->M_auth->activate_user($email);
+			$this->session->set_flashdata("message", "<div class='input-group col-lg-12 mb-4 alert alert-info text-center' role='alert'>Verifikasi Berhasil, Silakan login untuk memulai</div>");
+
+			redirect("auth/login");
+
+		}
+
+	}
+
+}
