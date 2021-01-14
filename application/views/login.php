@@ -27,7 +27,7 @@
 	        </div>
 
 	        <div class="col-md-7 col-lg-6 ml-auto">
-	            <form action="#">
+	            <form action="<?=base_url()?>auth/submit_login" method="post">
 	                <div class="row">
 
                         <?=$this->session->flashdata('message')?>
@@ -53,9 +53,9 @@
 
 	                    <!-- Submit Button -->
 	                    <div class="form-group col-lg-12 mx-auto mb-0">
-	                        <a href="#" class="btn btn-primary btn-block py-2">
+	                        <button type="submit" class="btn btn-primary btn-block py-2">
 	                            <span class="font-weight-bold">Login</span>
-	                        </a>
+	                        </button>
 	                    </div>
 
 	                    <div class="form-group col-lg-12 mx-auto mb-0 text-right">

@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Auth extends CI_Controller {
 
-	public function login()
+	public function login_page()
 	{
 		$this->load->view('login');
 	}
@@ -77,10 +77,24 @@ class Auth extends CI_Controller {
 			$this->M_auth->activate_user($email);
 			$this->session->set_flashdata("message", "<div class='input-group col-lg-12 mb-4 alert alert-info text-center' role='alert'>Verifikasi Berhasil, Silakan login untuk memulai</div>");
 
-			redirect("auth/login");
+			redirect("auth/login_page");
 
 		}
 
+	}
+
+	public function submit_login(){
+
+		$this->load->model('M_auth');
+
+		$check = $this->M_auth->is_user_exist();
+
+		if($check === true){
+			redirect('home');
+		}else{
+			$this->session->set_flashdata("message", "<div class='input-group col-lg-12 mb-4 alert alert-info text-center' role='alert'>Login Gagal, periksa kembali email dan password</div>");
+			redirect('auth/login_page');
+		}
 	}
 
 }

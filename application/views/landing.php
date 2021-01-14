@@ -131,7 +131,7 @@
 
 	                    <!-- Already Registered -->
 	                    <div class="text-center w-100">
-	                        <p class="text-muted font-weight-bold">Already Registered ? <a href="<?=base_url()?>auth/login" class="text-primary ml-2">Login</a></p>
+	                        <p class="text-muted font-weight-bold">Already Registered ? <a href="<?=base_url()?>auth/login_page" class="text-primary ml-2">Login</a></p>
 	                    </div>
 
 	                </div>
