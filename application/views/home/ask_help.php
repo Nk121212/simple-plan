@@ -26,21 +26,21 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
-                        <textarea class="form-control" name="purpose" placeholder="Purpose Description"></textarea>
+                        <textarea class="form-control" name="purpose" placeholder="Purpose Description" required></textarea>
                     </div>
                     <div class="col-md-6">
                         <hr>
                         <label for="">Rating :</label>
-                        <input type="text" name="rating" class="star-rating rating-loading" value="0" data-size="md" title="">
+                        <input type="text" name="rating" class="star-rating rating-loading" value="0" data-size="md" title="" required>
                     </div>
                     <div class="col-md-6">
                         <hr>
                         <label for="">Attachment :</label>
-                        <input type="file" name="upload" class="form-control">
+                        <input type="file" name="upload" class="form-control" required>
                     </div>
                     <div class="col-md-12">
                         <hr>
-                        <textarea class="form-control" placeholder="Comment" name="comment"></textarea>
+                        <textarea class="form-control" placeholder="Comment" name="comment" required></textarea>
                     </div>
                     <div class="col-md-6">
                         <hr>
