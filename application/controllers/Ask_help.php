@@ -15,19 +15,55 @@ class Ask_help extends CI_Controller {
 		$this->load->view('home/home', $data);
 	}
 
-	public function add_helper_modal(){
-		$this->load->view('home/modals/add_helper');
+	public function add_helper($id){
+        $this->load->model('M_crud');
+
+        $list_helper = $this->M_crud->get_my_helper($this->session->userdata('email'));
+		$data = array('main' => 'home/add_helper', 'list_helper' => $list_helper);
+
+		$this->load->view('home/home', $data);
 	}
+
+    public function submit_helper(){
+
+        $this->load->model('M_crud');
+
+        $id_purpose = base64_decode($this->input->post('id_purpose'));
+
+        unset($_POST['id_purpose']);
+        //print_r($this->input->post());
+
+        $postData = array_merge($this->input->post(), array('id_purpose' => $id_purpose));
+
+        $helper = $this->input->post('helper_desc');
+        $upload = $this->do_upload('upload/', $helper);
+
+        if($upload['status'] == 'ok'){
+
+            $insert = $this->M_crud->post_insert('SP_HELPER', $postData, array('attachment' => $upload['image_path']));
+
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Add Helper Berhasil</div>');
+
+            redirect('ask_help/add_helper/'.base64_encode($id_purpose).'');
+
+        }else{
+
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Error, Add Helper Gagal '.$upload['message'].'</div>');
+
+            redirect('ask_help/add_helper/'.base64_encode($id_purpose).'');
+
+        }
+    }
 
 	public function submit_purpose(){
 		$this->load->model('M_crud');
-		//print_r($this->input->post());
+
 		$purpose = $this->input->post('purpose');
 		$upload = $this->do_upload('upload/', $purpose);
 
 		if($upload['status'] == 'ok'){
 
-			$insert = $this->M_crud->post_insert('SP_PURPOSE', array('attachment' => $upload['image_path']));
+			$insert = $this->M_crud->post_insert('SP_PURPOSE', $this->input->post(), array('attachment' => $upload['image_path'], 'email_user' => $this->session->userdata('email')));
 
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Create Purpose Berhasil</div>');
 
@@ -35,7 +71,7 @@ class Ask_help extends CI_Controller {
 
 		}else{
 
-			$this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Error, Create Purpose Gagal</div>');
+			$this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Error, Create Purpose Gagal '.$upload['message'].'</div>');
 
          	redirect('ask_help/index');
 

@@ -42,7 +42,7 @@
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2>John Doe</h2>
+                <h2><?=$this->session->userdata('first_name')?> <?=$this->session->userdata('last_name')?></h2>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -108,7 +108,7 @@
               <ul class=" navbar-right">
                 <li class="nav-item dropdown open" style="padding-left: 15px;">
                   <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                    <img src="<?=base_url()?>assets/template/images/img.jpg" alt="">John Doe
+                    <img src="<?=base_url()?>assets/template/images/img.jpg" alt=""><?=$this->session->userdata('first_name')?> <?=$this->session->userdata('last_name')?>
                   </a>
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item"  href="javascript:;"> Profile</a>
@@ -117,7 +117,7 @@
                         <span>Settings</span>
                       </a-->
                     <!--a class="dropdown-item"  href="javascript:;">Help</a-->
-                    <a class="dropdown-item"  href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                    <a class="dropdown-item"  href="<?=base_url()?>auth/submit_logout"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                   </div>
                 </li>
 
@@ -226,5 +226,25 @@
     <script type="text/javascript" src="<?=base_url()?>assets/js/load-star-rating.js"></script>
 
     <script type="text/javascript" src="<?=base_url()?>assets/template/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+
+        $('.datepicker').datepicker({
+          format: 'yyyy-mm-dd',
+          autoclose: true,
+          todayHighlight: true
+        });
+
+        $(".numericOnly").keypress(function (e) {
+            if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
+        });
+
+        $('[data-toggle="tooltip"]').on("mouseleave", function(){
+            $(this).tooltip("hide"); 
+        })
+
+      })
+    </script>
 
 </html>

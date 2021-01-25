@@ -74,15 +74,7 @@ class M_auth extends CI_Model{
 		$this->db->where('status', 1);
 		$query = $this->db->get();
 
-		if($query->num_rows() > 0){
-
-			if (password_verify($this->input->post('password'), $query->row()->password)) {
-	            return true;
-	        } else {
-	            return false;
-	        }
-
-		}
+		return $query;
 
 	}
 

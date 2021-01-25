@@ -60,23 +60,3 @@
   </div>
 
 </div>
-
-<script type="text/javascript">
-    $(document).ready(function(){
-
-        $(".numericOnly").keypress(function (e) {
-            if (String.fromCharCode(e.keyCode).match(/[^0-9]/g)) return false;
-        });
-
-        $(".datepicker").datepicker({
-            format: 'yyyy-mm-dd',
-            autoclose: true,
-            todayHighlight: true,
-        });
-
-        $('[data-toggle="tooltip"]').on("mouseleave", function(){
-            $(this).tooltip("hide"); 
-        })
-
-    })
-</script>

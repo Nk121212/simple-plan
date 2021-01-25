@@ -1,4 +1,7 @@
 
+
+<link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/template/vendor/datatable/css/datatables.min.css">
+
 <div class="col-md-12 col-sm-4">
   <div class="x_panel tile">
     <div class="x_title">
@@ -17,7 +20,7 @@
     </div>
     <div class="x_content">
 
-        <table class="table table-borderless text-center">
+        <table class="table table-borderless text-center" id="table_purpose">
             <thead>
                 <tr>
                     <th width="40%">Purpose</th>
@@ -26,7 +29,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr style="border: 1px solid antiquewhite;">
+                <!--tr style="border: 1px solid antiquewhite;">
                     <td>
                         Purpoe 1
                     </td>
@@ -49,7 +52,7 @@
                         <a href="" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Helper</a>
                         <a href="" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Purpose</a>
                     </td>
-                </tr>
+                </tr-->
             </tbody>
         </table>
 
@@ -58,3 +61,6 @@
   </div>
 
 </div>
+
+<script type="text/javascript" src="<?=base_url()?>assets/js/preview_purpose.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/template/vendor/datatable/js/datatables.min.js"></script>

@@ -89,12 +89,51 @@ class Auth extends CI_Controller {
 
 		$check = $this->M_auth->is_user_exist();
 
-		if($check === true){
-			redirect('home');
-		}else{
-			$this->session->set_flashdata("message", "<div class='input-group col-lg-12 mb-4 alert alert-info text-center' role='alert'>Login Gagal, periksa kembali email dan password</div>");
+		//print_r($check->num_rows());
+
+		if($check->num_rows() > 0){
+
+			if (password_verify($this->input->post('password'), $check->row()->password)) {
+
+				//echo 'verifiy oke';
+
+				$data_login = array(
+					'email' => $check->row()->email,
+					'first_name' => $check->row()->first_name,
+					'last_name' => $check->row()->last_name,
+					'login' => true
+				);
+
+	            $this->session->set_userdata($data_login);
+
+	            redirect('home');
+
+	        } else {
+
+	        	//echo 'verifiy gagal';
+
+	            $this->session->set_flashdata("message", "<div class='input-group col-lg-12 mb-4 alert alert-info text-center' role='alert'>Login Gagal, periksa kembali email dan password</div>");
+				
+				redirect('auth/login_page');
+
+	        }
+
+		} else {
+
+			$this->session->set_flashdata("message", "<div class='input-group col-lg-12 mb-4 alert alert-info text-center' role='alert'>Login Gagal, user tidak ditemukan</div>");
+				
 			redirect('auth/login_page');
+
 		}
+
+	}
+
+	public function submit_logout() {
+
+		$this->session->sess_destroy();
+
+		redirect(base_url().'auth/login_page');
+
 	}
 
 }
