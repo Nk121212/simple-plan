@@ -10,7 +10,7 @@ class M_auth extends CI_Model{
 		$data = array(
 			'email' => $array['email'],
 			'otp' => $array['kode_otp'],
-			'valid_until' => date("Y-m-d H:i:s", strtotime($dtformat." +30 minutes"))
+			'valid_until' => date("Y-m-d H:i:s", strtotime($dtformat." +10 minutes"))
 		);
 
 		$query = $this->db->replace('sp_confirmation_log', $data);
