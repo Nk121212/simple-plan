@@ -108,6 +108,7 @@ class Ask_help extends CI_Controller {
         $config['max_height']           = 6000;
         $config['file_name']           	= $file_name;
         $config['overwrite']           	= true;
+        $config['encrypt_name']         = true;
 
         $this->load->library('upload', $config);
         $this->upload->initialize($config);

@@ -30,6 +30,26 @@
                     </div>
                     <div class="col-md-6">
                         <hr>
+                        <label for="">Start Date :</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control datepicker" name="start_date" id="start_date" required>
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <hr>
+                        <label for="">End Date :</label>
+                        <div class="input-group date">
+                            <input type="text" class="form-control datepicker" name="end_date" id="end_date" required>
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <hr>
                         <label for="">Rating :</label>
                         <input type="text" name="rating" class="star-rating rating-loading" value="0" data-size="md" title="" required>
                     </div>
@@ -74,8 +94,16 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#helper').change(function(){
-            alert('a');
+        
+        $('#start_date,#end_date').change(function(){
+            var start = $('#start_date').val();
+            var end = $('#end_date').val();
+
+            if(end < start && end != ''){
+                alert('End Date tidak boleh kurang dari Start Date !');
+                $("#end_date").val("");
+            }
         })
+
     })
 </script>
