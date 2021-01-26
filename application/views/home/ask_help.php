@@ -40,6 +40,17 @@
                     </div>
                     <div class="col-md-12">
                         <hr>
+                        <label for="">Helper :</label>
+                        <select class="form-control selectpicker" name="helper[]" multiple data-live-search="true" id="helper" required>
+                          <?php
+                            foreach ($helper_list->result() as $key => $value) {
+                                echo '<option value="'.$value->email.'">'.$value->first_name.' '.$value->last_name.'</option>';
+                            }
+                          ?>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <hr>
                         <textarea class="form-control" placeholder="Comment" name="comment" required></textarea>
                     </div>
                     <div class="col-md-6">
@@ -60,3 +71,11 @@
   </div>
 
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#helper').change(function(){
+            alert('a');
+        })
+    })
+</script>

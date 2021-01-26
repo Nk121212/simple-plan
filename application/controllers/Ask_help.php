@@ -6,7 +6,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Ask_help extends CI_Controller {
 
 	public function index(){
-		$data = array('main' => 'home/ask_help');
+
+        $this->load->model('M_crud');
+
+        $data_helper = $this->M_crud->get_my_helper($this->session->userdata('email'));
+		$data = array('main' => 'home/ask_help', 'helper_list' => $data_helper);
+
 		$this->load->view('home/home', $data);
 	}
 
@@ -56,14 +61,28 @@ class Ask_help extends CI_Controller {
     }
 
 	public function submit_purpose(){
+
 		$this->load->model('M_crud');
 
 		$purpose = $this->input->post('purpose');
 		$upload = $this->do_upload('upload/', $purpose);
 
+        $helper = $this->input->post('helper');
+
+        unset($_POST['helper']); //unset helper karena tidak akan di save di tabel purpose
+
 		if($upload['status'] == 'ok'){
 
 			$insert = $this->M_crud->post_insert('SP_PURPOSE', $this->input->post(), array('attachment' => $upload['image_path'], 'email_user' => $this->session->userdata('email')));
+
+            $last_insert_id = $this->db->insert_id();
+
+            foreach ($helper as $key => $value) {
+                //echo $value;
+                $insert_helper = $this->M_crud->post_insert('SP_PURPOSE_HELPER', array('id_purpose' => $last_insert_id, 'email_helper' => $value));
+            }
+
+            //$insert_helper = $this->M_crud->post_insert('SP_PURPOSE_HELPER', );
 
 			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Create Purpose Berhasil</div>');
 

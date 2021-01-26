@@ -21,6 +21,8 @@
 
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/template/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
 
+    <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/template/vendor/bootstrap-select/css/bootstrap-select.min.css">
+
     <!-- jQuery -->
     <script src="<?=base_url()?>assets/template/vendor/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
@@ -226,6 +228,8 @@
     <script type="text/javascript" src="<?=base_url()?>assets/js/load-star-rating.js"></script>
 
     <script type="text/javascript" src="<?=base_url()?>assets/template/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
+    <script type="text/javascript" src="<?=base_url()?>assets/template/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
 
     <script type="text/javascript">
       $(document).ready(function(){
