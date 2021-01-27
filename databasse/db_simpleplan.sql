@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2021-01-25 12:49:49
+Date: 2021-01-27 09:18:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -48,12 +48,11 @@ CREATE TABLE `sp_helper` (
   `comment` varchar(255) DEFAULT '',
   `status` smallint(6) DEFAULT 0 COMMENT '0=belum ditanggapi, 1 = diterima, 2 = di tolak',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sp_helper
 -- ----------------------------
-INSERT INTO `sp_helper` VALUES ('1', '3', 'setiawankahfii@gmail.com', 'Help me do this', '2021-01-25', '30', '4', 'upload/Help_me_do_this.jpg', 'Please Help me', '0');
 
 -- ----------------------------
 -- Table structure for sp_purpose
@@ -66,15 +65,29 @@ CREATE TABLE `sp_purpose` (
   `rating` varchar(5) DEFAULT '',
   `attachment` varchar(255) DEFAULT '',
   `comment` varchar(255) DEFAULT '',
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
   PRIMARY KEY (`id`,`email_user`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Records of sp_purpose
 -- ----------------------------
-INSERT INTO `sp_purpose` VALUES ('1', 'setiawankahfii@gmail.com', 'Membuat jalan dadakan', '3.5', 'upload/Membuat_jalan_dadakan.jpg', 'Jalan bolong kecamatan itu');
-INSERT INTO `sp_purpose` VALUES ('2', 'setiawankahfii@gmail.com', 'Mancing Mania', '2.5', 'upload/Mancing_Mania.jpg', 'Jatigede');
-INSERT INTO `sp_purpose` VALUES ('3', 'vdot04@gmail.com', 'Nonton film', '5', 'upload/Nonton_film.jpg', 'Hiburan');
+
+-- ----------------------------
+-- Table structure for sp_purpose_helper
+-- ----------------------------
+DROP TABLE IF EXISTS `sp_purpose_helper`;
+CREATE TABLE `sp_purpose_helper` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_purpose` int(11) DEFAULT NULL,
+  `email_helper` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of sp_purpose_helper
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for sp_user
