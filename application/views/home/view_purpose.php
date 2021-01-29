@@ -20,6 +20,10 @@
     </div>
     <div class="x_content">
 
+        <div class="col-md-12">
+            <?=$this->session->flashdata('message')?>
+        </div>
+
         <table class="table table-borderless text-center" id="table_purpose">
             <thead>
                 <tr>

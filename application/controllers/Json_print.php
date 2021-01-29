@@ -36,14 +36,14 @@ class Json_print extends CI_Controller {
                 'id_purpose' => $dt_pp->id
             );
 
-        	$get_helper = $this->M_crud->get_where('SP_HELPER', $arr);
+        	$get_helper = $this->M_crud->get_where('SP_PURPOSE_HELPER', $arr);
 
             $data['data'][] = array(
                 'id' => $dt_pp->id,
                 'purpose' => $dt_pp->purpose,
                 'helper' => '<a href="" class="btn btn-sm btn-primary">'.$get_helper->num_rows().' Helper</a>',
-                'action' => '<a href="'.base_url().'ask_help/add_helper/'.base64_encode($dt_pp->id).'" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Helper</a>
-                	<a href="'.base_url().'ask_help/delete_purpose/'.$dt_pp->id.'" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Purpose</a>'
+                'action' => '<a href="'.base_url().'purpose/add_helper/'.base64_encode($dt_pp->id).'" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Helper</a>
+                	<a href="'.base_url().'purpose/delete_purpose/'.$dt_pp->id.'" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Purpose</a>'
             );
 
             $i++;

@@ -1,7 +1,7 @@
 <div class="col-md-12 col-sm-4 ">
   <div class="x_panel tile">
     <div class="x_title">
-      <h2>Update | Add New Helper</h2>
+      <h2>New | Add Purpose</h2>
       <ul class="nav navbar-right panel_toolbox">
         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
         </li>
@@ -20,20 +20,18 @@
             <?=$this->session->flashdata('message')?>
         </div>
 
-        <form method="post" action="<?=base_url()?>purpose/submit_helper">
-
-            <input type="hidden" name="id_purpose" value="<?=$id_purpose?>">
+        <form method="post" action="<?=base_url()?>purpose/submit_purpose" enctype="multipart/form-data">
 
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
-                        <textarea class="form-control" name="purpose" placeholder="Purpose Description" disabled><?=!empty($purpose_data) ? $purpose_data[0]['purpose'] : ''?></textarea>
+                        <textarea class="form-control" name="purpose" placeholder="Purpose Description" required><?=!empty($purpose_data) ? $purpose_data[0]['purpose'] : ''?></textarea>
                     </div>
                     <div class="col-md-6">
                         <hr>
                         <label for="">Start Date :</label>
                         <div class="input-group date">
-                            <input value="<?=!empty($purpose_data) ? $purpose_data[0]['start_date'] : ''?>" type="text" class="form-control datepicker" name="start_date" id="start_date" disabled>
+                            <input value="<?=!empty($purpose_data) ? $purpose_data[0]['start_date'] : ''?>" type="text" class="form-control datepicker" name="start_date" id="start_date" required>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
@@ -43,7 +41,7 @@
                         <hr>
                         <label for="">End Date :</label>
                         <div class="input-group date">
-                            <input value="<?=!empty($purpose_data) ? $purpose_data[0]['end_date'] : ''?>" type="text" class="form-control datepicker" name="end_date" id="end_date" disabled>
+                            <input value="<?=!empty($purpose_data) ? $purpose_data[0]['end_date'] : ''?>" type="text" class="form-control datepicker" name="end_date" id="end_date" required>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
@@ -52,12 +50,12 @@
                     <div class="col-md-6">
                         <hr>
                         <label for="">Rating :</label>
-                        <input type="text" name="rating" class="star-rating rating-loading" value="<?=!empty($purpose_data) ? $purpose_data[0]['rating'] : 0?>" data-size="md" title="" disabled>
+                        <input type="text" name="rating" class="star-rating rating-loading" value="<?=!empty($purpose_data) ? $purpose_data[0]['rating'] : 0?>" data-size="md" title="" required>
                     </div>
                     <div class="col-md-6">
                         <hr>
                         <label for="">Attachment :</label>
-                        <input type="file" name="upload" class="form-control" disabled>
+                        <input type="file" name="upload" class="form-control" required>
                     </div>
                     <div class="col-md-12">
                         <hr>
@@ -72,7 +70,7 @@
                     </div>
                     <div class="col-md-12">
                         <hr>
-                        <textarea class="form-control" placeholder="Comment" name="comment" disabled><?=!empty($purpose_data) ? $purpose_data[0]['comment'] : ''?></textarea>
+                        <textarea class="form-control" placeholder="Comment" name="comment" required><?=!empty($purpose_data) ? $purpose_data[0]['comment'] : ''?></textarea>
                     </div>
                     <div class="col-md-6">
                         <hr>
@@ -95,7 +93,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
 
-        $('.selectpicker').selectpicker('val', <?=json_encode($helper)?>);
+        $('.selectpicker').selectpicker('val', [<?=json_encode($helper[0]['email_helper'])?>]);
         
         $('#start_date,#end_date').change(function(){
             var start = $('#start_date').val();

@@ -63,8 +63,13 @@
                   </li>
                   <li><a><i class="fa fa-edit"></i> New <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="ask_help">Ask For Help</a></li>
-                      <li><a href="form_advanced.html">Help My Self</a></li>
+                      <li><a href="<?=base_url()?>purpose/new_purpose">Purpose</a></li>
+                      <li><a href="<?=base_url()?>task/new_task">Task</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-eye"></i> View <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="<?=base_url()?>purpose/view_purpose">My Purpose</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-file"></i> Draft <span class="fa fa-chevron-down"></span></a>

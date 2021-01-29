@@ -65,6 +65,19 @@ class M_crud extends CI_Model{
 
 	}
 
+	public function delete($table, $where){
+		$this->db->delete($table, $where);
+		return $this;
+	}
+
+	public function get_where_in($table, $field_in, $value_field_in){
+		$this->db->select('*');
+		$this->db->from($table);
+		$this->db->where_in($field_in, $value_field_in);
+		$query = $this->db->get();
+		return $query;
+	}
+
 }
 
 ?>

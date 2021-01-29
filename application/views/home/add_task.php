@@ -1,8 +1,7 @@
-
 <div class="col-md-12 col-sm-4 ">
   <div class="x_panel tile">
     <div class="x_title">
-      <h2>New | Ask For Help</h2>
+      <h2>New | Add Task</h2>
       <ul class="nav navbar-right panel_toolbox">
         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
         </li>
@@ -21,18 +20,29 @@
             <?=$this->session->flashdata('message')?>
         </div>
 
-        <form method="post" action="<?=base_url()?>ask_help/submit_purpose" enctype="multipart/form-data">
+        <form method="post" action="<?=base_url()?>task/submit_task" enctype="multipart/form-data">
 
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12">
-                        <textarea class="form-control" name="purpose" placeholder="Purpose Description" required></textarea>
+                        <select name="id_purpose" id="id_purpose" class="form-control">
+                            <option disabled selected>Pilih Purpose</option>
+                            <?php
+                                foreach ($purpose as $key => $value) {
+                                    echo '<option value="'.$value->id.'">'.$value->purpose.'</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="col-md-12">
+                        <hr>
+                        <textarea class="form-control" name="task" placeholder="Task Description" required></textarea>
                     </div>
                     <div class="col-md-6">
                         <hr>
                         <label for="">Start Date :</label>
                         <div class="input-group date">
-                            <input type="text" class="form-control datepicker" name="start_date" id="start_date" required>
+                            <input value="" type="text" class="form-control datepicker" name="start_date" id="start_date" required>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
@@ -42,7 +52,7 @@
                         <hr>
                         <label for="">End Date :</label>
                         <div class="input-group date">
-                            <input type="text" class="form-control datepicker" name="end_date" id="end_date" required>
+                            <input value="" type="text" class="form-control datepicker" name="end_date" id="end_date" required>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
@@ -60,17 +70,6 @@
                     </div>
                     <div class="col-md-12">
                         <hr>
-                        <label for="">Helper :</label>
-                        <select class="form-control selectpicker" name="helper[]" multiple data-live-search="true" id="helper" required>
-                          <?php
-                            foreach ($helper_list->result() as $key => $value) {
-                                echo '<option value="'.$value->email.'">'.$value->first_name.' '.$value->last_name.'</option>';
-                            }
-                          ?>
-                        </select>
-                    </div>
-                    <div class="col-md-12">
-                        <hr>
                         <textarea class="form-control" placeholder="Comment" name="comment" required></textarea>
                     </div>
                     <div class="col-md-6">
@@ -78,13 +77,14 @@
                     </div>
                     <div class="col-md-6 text-right">
                         <hr>
-                        <a href="<?=base_url()?>ask_help/view_purpose" class="btn btn-outline-secondary">Preview Purpose</a>
-                        <button type="submit" class="btn btn-outline-secondary">Create Purpose</button>
+                        <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-save"></i> Save</button>
                     </div>              
                 </div>
             </div>
             
         </form>
+
+
 
     </div>
 
