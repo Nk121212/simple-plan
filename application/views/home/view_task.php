@@ -5,7 +5,7 @@
 <div class="col-md-12 col-sm-4">
   <div class="x_panel tile">
     <div class="x_title">
-      <h2>Preview | My Purpose</h2>
+      <h2>Preview | My Task</h2>
       <ul class="nav navbar-right panel_toolbox">
         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
         </li>
@@ -24,12 +24,13 @@
             <?=$this->session->flashdata('message')?>
         </div>
 
-        <table class="table table-borderless text-center" id="table_purpose">
+        <table class="table table-borderless text-center" id="table_task">
             <thead>
                 <tr>
-                    <th width="40%">Purpose</th>
-                    <th width="30%">Helper</th>
-                    <th width="30%">Action</th>
+                    <th>Purpose</th>
+                    <th>Task</th>
+                    <th>Comment</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,5 +43,5 @@
 
 </div>
 
-<script type="text/javascript" src="<?=base_url()?>assets/js/preview_purpose.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/preview_task.js"></script>
 <script type="text/javascript" src="<?=base_url()?>assets/template/vendor/datatable/js/datatables.min.js"></script>

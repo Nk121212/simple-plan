@@ -54,6 +54,53 @@ class Json_print extends CI_Controller {
 
 	}
 
+    public function list_task(){
+
+        $this->load->model('M_crud');
+
+        header('content-type:application/json');
+
+        $where = array(
+            'email_helper' => $this->session->userdata('email')
+        );
+
+        $task_count = $this->M_crud->join_2_table('SP_TASK_PURPOSE', 'SP_PURPOSE', 'id_purpose', 'id', '', 'SP_TASK_PURPOSE.id');
+
+        $total_task = count($task_count->result());
+
+        $offset = $this->input->post('start') ? $this->input->post('start') : 0;
+
+        $select = 'SP_TASK_PURPOSE.id, SP_TASK_PURPOSE.id_purpose, SP_TASK_PURPOSE.task, SP_TASK_PURPOSE.comment as task_comment, SP_PURPOSE.id, SP_PURPOSE.email_user, SP_PURPOSE.purpose';
+
+        $task_paging = $this->M_crud->join_2_table('SP_TASK_PURPOSE', 'SP_PURPOSE', 'id_purpose', 'id', '', 'SP_TASK_PURPOSE.id', $offset, '10', $select);
+
+        $data = array(
+            'response_real'=>$task_paging->result(),
+            'recordsTotal' => $total_task,
+            'recordsFiltered' => $total_task,
+            'data' => array()
+        );
+
+        $i=1;
+        foreach($task_paging->result() as $dt_task){
+
+            $data['data'][] = array(
+                'id' => $dt_task->id,
+                'purpose' => $dt_task->purpose,
+                'task' => $dt_task->task,
+                'comment' => $dt_task->task_comment,
+                'action' => '<a href="'.base_url().'purpose/delete_purpose/'.$dt_task->id.'" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Task</a>'
+            );
+
+            $i++;
+
+        }
+
+        echo json_encode($data, JSON_PRETTY_PRINT);
+
+    }
+
+
 }
 
 ?>

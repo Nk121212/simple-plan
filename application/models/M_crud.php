@@ -78,6 +78,17 @@ class M_crud extends CI_Model{
 		return $query;
 	}
 
+	public function join_2_table($table1, $table2, $field_on1, $field_on2, $where='', $group_by='', $offset='', $limit='', $select=''){
+		$this->db->select($select == '' ? '*' : $select);
+		$this->db->from($table1);
+		$this->db->join($table2, $table2.'.'.$field_on2.' = '.$table1.'.'.$field_on1);
+		$where == '' ? '' : $this->db->where($where);
+		$group_by == '' ? '' : $this->db->group_by($group_by);
+		$is_limit = ($offset == '' || $limit == '') ? '' : $this->db->limit($limit, $offset);
+		$query = $this->db->get();
+		return $query;
+	}
+
 }
 
 ?>

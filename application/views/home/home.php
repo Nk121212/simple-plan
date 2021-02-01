@@ -70,6 +70,12 @@
                   <li><a><i class="fa fa-eye"></i> View <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="<?=base_url()?>purpose/view_purpose">My Purpose</a></li>
+                      <li><a href="<?=base_url()?>task/view_task">My Task</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-refresh"></i> Update <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="<?=base_url()?>task/update_task">Progress Task</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-file"></i> Draft <span class="fa fa-chevron-down"></span></a>
