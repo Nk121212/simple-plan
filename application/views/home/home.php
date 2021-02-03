@@ -23,6 +23,8 @@
 
     <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/template/vendor/bootstrap-select/css/bootstrap-select.min.css">
 
+    <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/template/vendor/sweetalert/css/sweetalert.css">
+
     <!-- jQuery -->
     <script src="<?=base_url()?>assets/template/vendor/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
@@ -65,12 +67,14 @@
                     <ul class="nav child_menu">
                       <li><a href="<?=base_url()?>purpose/new_purpose">Purpose</a></li>
                       <li><a href="<?=base_url()?>task/new_task">Task</a></li>
+                      <li><a href="<?=base_url()?>task/forward_task">Forward Task</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-eye"></i> View <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="<?=base_url()?>purpose/view_purpose">My Purpose</a></li>
                       <li><a href="<?=base_url()?>task/view_task">My Task</a></li>
+                      <li><a href="<?=base_url()?>helper/view_helper">My Helper</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-refresh"></i> Update <span class="fa fa-chevron-down"></span></a>
@@ -78,7 +82,7 @@
                       <li><a href="<?=base_url()?>task/update_task">Progress Task</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-file"></i> Draft <span class="fa fa-chevron-down"></span></a>
+                  <!--li><a><i class="fa fa-file"></i> Draft <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="form.html">Ask For Help</a></li>
                       <li><a href="form_advanced.html">Help My Self</a></li>
@@ -97,10 +101,10 @@
                       <li><a href="form.html">Help Friends</a></li>
                       <li><a href="form_advanced.html">Help My Self</a></li>
                     </ul>
-                  </li>
+                  </li-->
                   <li><a><i class="fa fa-info"></i> Help <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="form.html">How To Use</a></li>
+                      <li><a href="<?=base_url()?>help">How To Use</a></li>
                       <li><a href="form.html">About</a></li>
                     </ul>
                   </li>
@@ -241,6 +245,8 @@
     <script type="text/javascript" src="<?=base_url()?>assets/template/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 
     <script type="text/javascript" src="<?=base_url()?>assets/template/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
+
+    <script type="text/javascript" src="<?=base_url()?>assets/template/vendor/sweetalert/js/sweetalert.min.js"></script>
 
     <script type="text/javascript">
       $(document).ready(function(){

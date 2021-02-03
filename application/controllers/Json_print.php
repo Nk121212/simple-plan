@@ -100,6 +100,47 @@ class Json_print extends CI_Controller {
 
     }
 
+    public function list_helper($id_purpose){
+
+        $this->load->model('M_crud');
+
+        header('content-type:application/json');
+
+        $where = array(
+            'SP_PURPOSE_HELPER.id_purpose' => $id_purpose
+        );
+    
+        $helper_count = $this->M_crud->join_2_table('SP_PURPOSE_HELPER', 'SP_USER', 'email_helper', 'email', $where);
+
+        $total_helper = count($helper_count->result());
+
+        $offset = $this->input->post('start') ? $this->input->post('start') : 0;
+
+        $helper_paging = $this->M_crud->join_2_table('SP_PURPOSE_HELPER', 'SP_USER', 'email_helper', 'email', $where, '', $offset, '10', '');
+
+        $data = array(
+            'response_real'=>$helper_paging->result(),
+            'recordsTotal' => $total_helper,
+            'recordsFiltered' => $total_helper,
+            'data' => array()
+        );
+
+        foreach($helper_paging->result() as $dt_helper){
+
+            $data['data'][] = array(
+                'id_purpose' => $dt_helper->id_purpose,
+                'email' => $dt_helper->email_helper,
+                'first_name' => $dt_helper->first_name,
+                'last_name' => $dt_helper->last_name,
+                'action' => '<a href="#" class="btn btn-sm btn-danger text-white delete" id-purpose="'.$dt_helper->id_purpose.'" email-helper="'.$dt_helper->email_helper.'"><i class="fa fa-trash"></i> Helper</a>'
+            );
+
+        }
+
+        echo json_encode($data, JSON_PRETTY_PRINT);
+
+    }
+
 
 }
 

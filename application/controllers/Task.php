@@ -38,13 +38,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		public function submit_task(){
 
 			$this->load->model('M_crud');
-			//print_r($this->input->post());
+			$this->load->model('M_globals');
+
+			$task = $this->input->post('task');
+			$upload = $this->M_globals->do_upload('upload/task/', $task);
+
 			$logged_in_email = $this->session->userdata('email');
 			$post_data = array_merge($this->input->post(), array('email_helper' => $logged_in_email));
-			//print_r($data);
-			$insert = $this->M_crud->post_insert('SP_TASK_PURPOSE', $post_data);
+			$insert = $this->M_crud->post_insert('SP_TASK_PURPOSE', $post_data, array('attachment' => $upload['image_path']));
 
-			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Create Task Berhasil</div>');
+			if(!$insert){
+
+				$this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Failed, Create Task Gagal !</div>');
+
+			}else{
+
+				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Create Task Berhasil !</div>');
+
+			}
+
 			redirect(base_url().'task/new_task');
 		}
 
@@ -127,6 +139,47 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				redirect(base_url().'task/update_task');
 
 			}
+		}
+
+		public function forward_task(){
+
+			$this->load->model('M_crud');
+
+			$where = array(
+				'email_user' => $this->session->userdata('email')
+			);
+
+			$my_purpose = $this->M_crud->get_where('SP_PURPOSE', $where);
+
+			$data = array('main' => 'home/forward_task', 'purpose' => $my_purpose->result());
+			$this->load->view('home/home', $data);
+
+		}
+
+		public function submit_forward_task(){
+
+			$this->load->model('M_crud');
+			$this->load->model('M_globals');
+			
+			$task = $this->input->post('task');
+			$upload = $this->M_globals->do_upload('upload/task/', $task);
+
+			//$logged_in_email = $this->session->userdata('email');
+			$post_data = $this->input->post();
+			$insert = $this->M_crud->post_insert('SP_TASK_PURPOSE', $post_data, array('attachment' => $upload['image_path']));
+
+			if(!$insert){
+
+				$this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Failed, Forward Task Gagal</div>');
+
+			}else{
+
+				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Forward Task Berhasil</div>');
+
+			}
+
+			redirect(base_url().'task/forward_task');
+
 		}
 
 	}

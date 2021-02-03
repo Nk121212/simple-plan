@@ -1,7 +1,7 @@
 <div class="col-md-12 col-sm-4 ">
   <div class="x_panel tile">
     <div class="x_title">
-      <h2>New | Add Purpose</h2>
+      <h2>New | Forward Task</h2>
       <ul class="nav navbar-right panel_toolbox">
         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
         </li>
@@ -20,18 +20,41 @@
             <?=$this->session->flashdata('message')?>
         </div>
 
-        <form method="post" action="<?=base_url()?>purpose/submit_purpose" enctype="multipart/form-data">
+        <form method="post" action="<?=base_url()?>task/submit_forward_task" enctype="multipart/form-data">
 
             <div class="col-md-12">
                 <div class="row">
+
+                    <div class="col-md-6">
+                        
+                        <label for="">Purpose :</label>
+                        <select name="id_purpose" id="id_purpose" class="form-control">
+                            <option disabled selected>Pilih Purpose</option>
+                            <?php
+                                foreach ($purpose as $key => $value) {
+                                    echo '<option value="'.$value->id.'">'.$value->purpose.'</option>';
+                                }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        
+                        <label for="">Helper :</label>
+                        <select name="email_helper" id="email_helper" class="form-control">
+                            <option disabled selected>Pilih Helper</option>
+                        </select>
+                    </div>
+
                     <div class="col-md-12">
-                        <textarea class="form-control" name="purpose" placeholder="Purpose Description" required><?=!empty($purpose_data) ? $purpose_data[0]['purpose'] : ''?></textarea>
+                        <hr>
+                        <textarea class="form-control" name="task" placeholder="Task Description" required></textarea>
                     </div>
                     <div class="col-md-6">
                         <hr>
                         <label for="">Start Date :</label>
                         <div class="input-group date">
-                            <input value="<?=!empty($purpose_data) ? $purpose_data[0]['start_date'] : ''?>" type="text" class="form-control datepicker" name="start_date" id="start_date" required>
+                            <input value="" type="text" class="form-control datepicker" name="start_date" id="start_date" required>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
@@ -41,7 +64,7 @@
                         <hr>
                         <label for="">End Date :</label>
                         <div class="input-group date">
-                            <input value="<?=!empty($purpose_data) ? $purpose_data[0]['end_date'] : ''?>" type="text" class="form-control datepicker" name="end_date" id="end_date" required>
+                            <input value="" type="text" class="form-control datepicker" name="end_date" id="end_date" required>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
@@ -50,7 +73,7 @@
                     <div class="col-md-6">
                         <hr>
                         <label for="">Rating :</label>
-                        <input type="text" name="rating" class="star-rating rating-loading" value="<?=!empty($purpose_data) ? $purpose_data[0]['rating'] : 0?>" data-size="md" title="" required>
+                        <input type="text" name="rating" class="star-rating rating-loading" value="0" data-size="md" title="" required>
                     </div>
                     <div class="col-md-6">
                         <hr>
@@ -59,36 +82,29 @@
                     </div>
                     <div class="col-md-12">
                         <hr>
-                        <label for="">Helper :</label>
-                        <select class="form-control selectpicker" name="helper[]" multiple data-live-search="true" id="helper" required>
-                          <?php
-                            foreach ($helper_list->result() as $key => $value) {
-                                echo '<option value="'.$value->email.'">'.$value->first_name.' '.$value->last_name.'</option>';
-                            }
-                          ?>
-                        </select>
-                    </div>
-                    <div class="col-md-12">
-                        <hr>
-                        <textarea class="form-control" placeholder="Comment" name="comment" required><?=!empty($purpose_data) ? $purpose_data[0]['comment'] : ''?></textarea>
+                        <textarea class="form-control" placeholder="Comment" name="comment" required></textarea>
                     </div>
                     <div class="col-md-6">
                         <hr>
                     </div>
                     <div class="col-md-6 text-right">
                         <hr>
-                        <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-share-alt"></i> Share</button>
+                        <button type="submit" class="btn btn-outline-secondary"><i class="fa fa-save"></i> Save</button>
                     </div>              
                 </div>
             </div>
             
         </form>
 
+
+
     </div>
 
   </div>
 
 </div>
+
+<script type="text/javascript" src="<?=base_url()?>assets/js/helper.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function(){
