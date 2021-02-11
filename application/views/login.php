@@ -23,7 +23,7 @@
 	    <div class="row py-5 mt-4 align-items-center">
 	        <!-- For Demo Purpose -->
 	        <div class="col-md-5 pr-lg-5 mb-5 mb-md-0">
-	            <img src="<?=base_url()?>assets/image/icon_reg.svg" alt="logo" class="img-fluid mb-3 d-none d-md-block">
+	            <img src="<?=base_url()?>assets/image/logo.jpg" alt="logo" class="img-fluid mb-3 d-none d-md-block">
 	        </div>
 
 	        <div class="col-md-7 col-lg-6 ml-auto">
@@ -86,6 +86,6 @@
 
 <script type="text/javascript" src="<?=base_url()?>bootstrap/js/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="<?=base_url()?>bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="<?=base_url()?>assets/js/login_script.js"></script>
+<!--script type="text/javascript" src="<?=base_url()?>assets/js/login_script.js"></script-->
 
 </html>

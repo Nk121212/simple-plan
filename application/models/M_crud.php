@@ -20,6 +20,14 @@ class M_crud extends CI_Model{
 		return $query;
 	}
 
+	public function post_replace($table_name, $postData){
+
+		$data = xssPrevent($postData);
+		$query = $this->db->replace($table_name, $data);
+
+		return $query;
+	}
+
 	public function get_all($table, $offset='', $limit=''){
 
 		$this->db->select('*');
@@ -87,6 +95,29 @@ class M_crud extends CI_Model{
 		$is_limit = ($offset == '' || $limit == '') ? '' : $this->db->limit($limit, $offset);
 		$query = $this->db->get();
 		return $query;
+	}
+
+	public function join_multiple_table($param='', $where='', $group_by='', $offset='', $limit='', $select='', $order_field='', $order_key=''){
+		
+		$this->db->select($select == '' ? '*' : $select);
+		$this->db->from($param['table'][0]);
+
+		foreach ($param['table_join_key'] as $key => $value) {
+		$tbl_join_key = explode("_", $value);
+		$field_join_key = explode("_", $param['field_join_key'][$key]);
+		//echo $tbl_join_key[0];
+		//echo $tbl_join_key[1];
+		$this->db->join($param['table'][$tbl_join_key[0]], $param['table'][$tbl_join_key[0]].'.'.$param['field'][$field_join_key[0]].' = '.$param['table'][$tbl_join_key[1]].'.'.$param['field'][$field_join_key[1]]);
+		}
+
+		$where == '' ? '' : $this->db->where($where);
+		$group_by == '' ? '' : $this->db->group_by($group_by);
+		$order_field == '' ? '' : $this->db->order_by($order_field, $order_key);
+		$is_limit = ($offset == '' || $limit == '') ? '' : $this->db->limit($limit, $offset);
+
+		$query = $this->db->get();
+		return $query;
+		
 	}
 
 }

@@ -22,7 +22,7 @@ class Auth extends CI_Controller {
 
 	    $this->email->initialize($config);
 	    $this->email->set_newline("\r\n");
-	    $this->email->from('cs@simpleplan.com', 'Simple Plan');
+	    $this->email->from('mail@SP.com', 'Simple Plan');
 	    $this->email->to($this->input->post('email'));
 	    $this->email->subject('Registrasi Akun Simple Plan');
 
@@ -40,7 +40,7 @@ class Auth extends CI_Controller {
 	    	$save_user = $this->M_auth->save_user($post);
 	    	$save_to_log = $this->M_auth->save_log_confirmation($post);
 
-	    	$this->session->set_flashdata('message', '<div class="alert alert-info" role="alert">Selamat, anda telah berhasil registrasi, Silakan buka email dan masukan kode verifikasi yang dikirim ke amail anda.</div><div class="alert alert-warning" role="alert">Kode verifikasi hanya valid selama 10 Menit setelah registrasi.</div>');
+	    	$this->session->set_flashdata('message', '<div class="alert alert-info" role="alert">Selamat, anda telah berhasil registrasi, Silakan buka email <b>(Inbox / Spam)</b> dan masukan kode verifikasi yang dikirim ke amail anda.</div><div class="alert alert-warning" role="alert">Kode verifikasi hanya valid selama 10 Menit setelah registrasi.</div>');
 
          	redirect('auth/confirmation_page');
 

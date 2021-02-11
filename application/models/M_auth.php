@@ -13,7 +13,7 @@ class M_auth extends CI_Model{
 			'valid_until' => date("Y-m-d H:i:s", strtotime($dtformat." +10 minutes"))
 		);
 
-		$query = $this->db->replace('sp_confirmation_log', $data);
+		$query = $this->db->replace('SP_CONFIRMATION_LOG', $data);
 
 		return $query;
 
@@ -28,7 +28,7 @@ class M_auth extends CI_Model{
 			'password' => password_hash($array['password'], PASSWORD_DEFAULT)
 		);
 
-		$query = $this->db->replace('sp_user', $data);
+		$query = $this->db->replace('SP_USER', $data);
 
 		return $query;
 
@@ -46,7 +46,7 @@ class M_auth extends CI_Model{
 		);
 
 		$this->db->select('*');
-		$this->db->from('sp_confirmation_log');
+		$this->db->from('SP_CONFIRMATION_LOG');
 		$this->db->where($where);
 		$query = $this->db->get();
 
@@ -61,7 +61,7 @@ class M_auth extends CI_Model{
 		);
 
 		$this->db->where('email', $email);
-		$query = $this->db->update('sp_user', $data);
+		$query = $this->db->update('SP_USER', $data);
 
 		return $query;
 
@@ -69,7 +69,7 @@ class M_auth extends CI_Model{
 
 	public function is_user_exist(){
 		$this->db->select('*');
-		$this->db->from('sp_user');
+		$this->db->from('SP_USER');
 		$this->db->where('email', $this->input->post('email'));
 		$this->db->where('status', 1);
 		$query = $this->db->get();

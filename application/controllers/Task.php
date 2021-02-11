@@ -130,7 +130,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 			$postData = $this->input->post();
 
-			$query = $this->M_crud->post_insert('SP_TASK_PROGRESS', $postData);
+			$query = $this->M_crud->post_replace('SP_TASK_PROGRESS', $postData);
 
 			if($query){
 

@@ -141,6 +141,75 @@ class Json_print extends CI_Controller {
 
     }
 
+    public function list_req_help(){
+        $this->load->model('M_crud');
+
+        header('content-type:application/json');
+
+        $param = array(
+			'table' => array(
+			  'SP_PURPOSE_HELPER',
+			  'SP_PURPOSE', 
+			  'SP_USER'
+			),
+			'field' => array(
+			  'id_purpose',
+			  'id', 
+			  'email',
+			  'email_user'
+			),
+			'table_join_key' => array(
+			  '1_0', 
+			  '2_1'
+			),
+			'field_join_key' => array(
+				'1_0',
+				'2_3'
+			)
+		);
+
+        $where = array(
+			'SP_PURPOSE_HELPER.email_helper' => $this->session->userdata('email')
+		);
+
+        $request_count = $this->M_crud->join_multiple_table($param, $where, 'SP_PURPOSE_HELPER.id_purpose');
+        
+        $total_request = count($request_count->result());
+
+        $offset = $this->input->post('start') ? $this->input->post('start') : 0;
+
+        $request_paging = $this->M_crud->join_multiple_table($param, $where, 'SP_PURPOSE_HELPER.id_purpose', $offset, '5');
+
+        $data = array(
+            'response_real'=>$request_paging->result(),
+            'recordsTotal' => $total_request,
+            'recordsFiltered' => $total_request,
+            'data' => array()
+        );
+
+        foreach($request_paging->result() as $dt_req){
+
+            $data['data'][] = array(
+                'image' => '
+                    <img src="'.base_url().''.$dt_req->image.'" class="rounded-circle" height="50">
+                    <p class="font-weight-bold" style="padding-top: 10px;">'.$dt_req->first_name.' '.$dt_req->last_name.'</p>
+                ',
+                'detail_request' => '
+                    <p class="font-weight-bold">Request Help '.date("d M Y h:i:s", strtotime($dt_req->add_at)).'</p>
+                    <p><b>'.$dt_req->purpose.'</b></p>
+                    <p>'.$dt_req->comment.'</p>
+                ',
+                'detail_others' => '
+                    <input type="text" name="rating" class="star-rating rating-loading" value="'.$dt_req->rating.'" data-size="sm" title="" readonly>
+                    <p class="font-weight-bold" style="padding-top:10px;">'.date("d M Y", strtotime($dt_req->start_date)).' - '.date("d M Y", strtotime($dt_req->end_date)).'</p>
+                '
+            );
+
+        }
+
+        echo json_encode($data, JSON_PRETTY_PRINT);
+    }
+
 
 }
 
