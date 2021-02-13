@@ -31,29 +31,40 @@
                 <tbody>
 
                   <?php
-                    foreach ($request_help->result() as $key => $req) {
-                      
+
+                    if(empty($request_help)){
                       echo '
-                      
-                        <tr style="border: 1px solid antiquewhite;">
-                            <td>
-                                <img src="'.base_url().''.$req->image.'" class="rounded-circle" height="50">
-                                <p class="font-weight-bold" style="padding-top: 10px;">'.$req->first_name.' '.$req->last_name.'</p>
-                            </td>
-                            <td>
-                                <p class="font-weight-bold">Request Help '.date("d M Y h:i:s", strtotime($req->add_at)).'</p>
-                                <p><b>'.$req->purpose.'</b></p>
-                                <p>'.$req->comment.'</p>
-                            </td>
-                            <td>
-                              <input type="text" name="rating" class="star-rating rating-loading" value="'.$req->rating.'" data-size="sm" title="" readonly>
-                              <p class="font-weight-bold" style="padding-top:10px;">'.date("d M Y", strtotime($req->start_date)).' - '.date("d M Y", strtotime($req->end_date)).'</p>
-                            </td>
+                        <tr style="background-color:red;color:white;">
+                          <td colspan="3">No Data</td>
                         </tr>
-
                       ';
+                    }else{
 
+                      foreach ($request_help->result() as $key => $req) {
+                        echo '
+                        
+                          <tr style="border: 1px solid antiquewhite;">
+                              <td>
+                                  <img src="'.base_url().''.$req->image.'" class="rounded-circle" height="50">
+                                  <p class="font-weight-bold" style="padding-top: 10px;">'.$req->first_name.' '.$req->last_name.'</p>
+                              </td>
+                              <td>
+                                  <p class="font-weight-bold">Request Help '.date("d M Y h:i:s", strtotime($req->add_at)).'</p>
+                                  <p><b>'.$req->purpose.'</b></p>
+                                  <p>'.$req->comment.'</p>
+                              </td>
+                              <td>
+                                <input type="text" name="rating" class="star-rating rating-loading" value="'.$req->rating.'" data-size="sm" title="" readonly>
+                                <p class="font-weight-bold" style="padding-top:10px;">'.date("d M Y", strtotime($req->start_date)).' - '.date("d M Y", strtotime($req->end_date)).'</p>
+                              </td>
+                          </tr>
+  
+                        ';
+  
+                      }
+                      
                     }
+                    
                   ?>
                     
                 </tbody>

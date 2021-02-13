@@ -42,8 +42,7 @@ class Json_print extends CI_Controller {
                 'id' => $dt_pp->id,
                 'purpose' => $dt_pp->purpose,
                 'helper' => '<a href="" class="btn btn-sm btn-primary">'.$get_helper->num_rows().' Helper</a>',
-                'action' => '<a href="'.base_url().'purpose/add_helper/'.base64_encode($dt_pp->id).'" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Helper</a>
-                	<a href="'.base_url().'purpose/delete_purpose/'.$dt_pp->id.'" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Purpose</a>'
+                'action' => '<a href="'.base_url().'purpose/add_helper/'.base64_encode($dt_pp->id).'" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Helper</a>'
             );
 
             $i++;
@@ -60,21 +59,44 @@ class Json_print extends CI_Controller {
 
         header('content-type:application/json');
 
+        $param = array(
+			'table' => array(
+			  'SP_TASK_PURPOSE',
+			  'SP_PURPOSE', 
+			  'SP_TASK_PROGRESS'
+			),
+			'field' => array(
+			  'id_purpose',
+			  'id', 
+			  'id_task',
+			),
+			'table_join_key' => array(
+			  '1_0', 
+			  '2_0'
+			),
+			'field_join_key' => array(
+				'1_0',
+				'2_1'
+			)
+        );
+
         $where = array(
             'email_helper' => $this->session->userdata('email')
         );
 
-        $task_count = $this->M_crud->join_2_table('SP_TASK_PURPOSE', 'SP_PURPOSE', 'id_purpose', 'id', '', 'SP_TASK_PURPOSE.id');
+        $select = 'SP_TASK_PURPOSE.*, SP_TASK_PURPOSE.comment as task_comment, SP_PURPOSE.*, SP_TASK_PROGRESS.*, SP_TASK_PURPOSE.attachment as attachment_task, SP_TASK_PURPOSE.start_date as task_start, SP_TASK_PURPOSE.end_date as task_finish';
+
+        $task_count = $this->M_crud->join_multiple_table($param, $where, 'sp_task_purpose.id', '', '', $select);
 
         $total_task = count($task_count->result());
 
         $offset = $this->input->post('start') ? $this->input->post('start') : 0;
 
-        $select = 'SP_TASK_PURPOSE.id, SP_TASK_PURPOSE.id_purpose, SP_TASK_PURPOSE.task, SP_TASK_PURPOSE.comment as task_comment, SP_PURPOSE.id, SP_PURPOSE.email_user, SP_PURPOSE.purpose';
-
-        $task_paging = $this->M_crud->join_2_table('SP_TASK_PURPOSE', 'SP_PURPOSE', 'id_purpose', 'id', '', 'SP_TASK_PURPOSE.id', $offset, '10', $select);
+        $task_paging = $this->M_crud->join_multiple_table($param, $where, 'sp_task_purpose.id', $offset, '10', $select);
+        //$task_paging = $this->M_crud->join_2_table('SP_TASK_PURPOSE', 'SP_PURPOSE', 'id_purpose', 'id', '', 'SP_TASK_PURPOSE.id', $offset, '10', $select);
 
         $data = array(
+            //'test' => pathinfo($task_paging->row()->attachment, PATHINFO_EXTENSION),
             'response_real'=>$task_paging->result(),
             'recordsTotal' => $total_task,
             'recordsFiltered' => $total_task,
@@ -84,12 +106,23 @@ class Json_print extends CI_Controller {
         $i=1;
         foreach($task_paging->result() as $dt_task){
 
+            $diff = abs(strtotime($dt_task->end_date) - strtotime($dt_task->start_date));
+
+            $years = floor($diff / (365*60*60*24));
+            $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+            $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+
+            //$interval = printf("%d tahun, %d bulan, %d hari\n", $years, $months, $days);
+
             $data['data'][] = array(
                 'id' => $dt_task->id,
                 'purpose' => $dt_task->purpose,
                 'task' => $dt_task->task,
                 'comment' => $dt_task->task_comment,
-                'action' => '<a href="'.base_url().'purpose/delete_purpose/'.$dt_task->id.'" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Task</a>'
+                'progress' => $dt_task->progress.' %',
+                'attachment' => '<a href="'.base_url().''.$dt_task->attachment_task.'" target="_blank"><i class="fa fa-eye"></i></a>',
+                'interval' => $years.' Tahun '. $months.' Bulan '. $days.' Hari'
+                //'action' => '<a href="'.base_url().'purpose/delete_purpose/'.$dt_task->id.'" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Task</a>'
             );
 
             $i++;

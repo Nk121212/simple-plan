@@ -31,8 +31,11 @@ $(function () {
 	    columns: [
 	    	{data: "purpose"},
 	        {data: "task"},
-	        {data: "comment"},
-	        {data: "action", orderable:false, className: "dt-body-center"}
+			{data: "comment"},
+			{data: "interval"},
+			{data: "progress"},
+			{data: "attachment"},
+	        //{data: "action", orderable:false, className: "dt-body-center"}
 	    ]
 	});
 

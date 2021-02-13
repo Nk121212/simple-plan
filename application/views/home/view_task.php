@@ -30,7 +30,9 @@
                     <th>Purpose</th>
                     <th>Task</th>
                     <th>Comment</th>
-                    <th>Action</th>
+                    <th>Durasi</th>
+                    <th>Progress</th>
+                    <th>Attachment</th>
                 </tr>
             </thead>
             <tbody>

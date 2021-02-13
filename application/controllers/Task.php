@@ -182,6 +182,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		}
 
+		public function get_progress_task(){
+
+			$this->load->model('M_crud');
+			//print_r($this->input->post());
+			$postData = $this->input->post();
+			$query = $this->M_crud->get_where('SP_TASK_PROGRESS', $postData);
+
+			$progress = isset($query->row()->progress) ? $query->row()->progress : 0;
+			echo $progress;
+
+		}
+
 	}
 
 ?>

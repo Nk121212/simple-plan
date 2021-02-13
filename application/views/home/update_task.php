@@ -1,3 +1,9 @@
+<style>
+    .notactive {
+        pointer-events: none;
+        cursor: default;
+    }
+</style>
 <div class="col-md-12 col-sm-4 ">
   <div class="x_panel tile">
     <div class="x_title">
@@ -52,7 +58,7 @@
                         <hr>
                         <label for="">% Progress :</label>
                         <div class="input-group date">
-                            <input type="text" name="progress" id="progress" class="form-control numericOnly">
+                            <input type="text" name="progress" id="progress" class="form-control numericOnly maxHundred">
                         </div>
                     </div>
                     
@@ -76,9 +82,10 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+
         $('#id_purpose').change(function(){
 
-            $('#id_task').val('');
+            $('#id_task').html('');
 
             var id_purpose = $(this).val();
             //alert(id_purpose);
@@ -87,10 +94,36 @@
               id_purpose: id_purpose,
             },
             function(resp){
+                $('#id_task').append('<option value="" disabled selected>Pilih Task</option>');
                 $.each(resp.data, function(k, v) {
                     $('#id_task').append('<option value="'+v.id+'">'+v.task+'</option>');
                 });
             });
         })
+
+        $('#id_task').change(function(){
+            
+            var id_purpose = $('#id_purpose').val();
+            var id_task = $(this).val();
+
+            //alert(id_purpose);
+            $.post("<?=base_url()?>task/get_progress_task",
+            {
+                id_purpose: id_purpose,
+                id_task: id_task,
+            },
+            function(resp){
+
+                $('#progress').val(resp).trigger('change');
+
+                if(resp != '0'){
+                    $('#progress').addClass("notactive");
+                }else{
+                    $('#progress').removeClass("notactive");
+                }
+                
+            });
+        })
+
     })
 </script>

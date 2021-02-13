@@ -249,6 +249,7 @@
     <script type="text/javascript" src="<?=base_url()?>assets/template/vendor/sweetalert/js/sweetalert.min.js"></script>
 
     <script type="text/javascript">
+
       $(document).ready(function(){
 
         $('.datepicker').datepicker({
@@ -265,7 +266,19 @@
             $(this).tooltip("hide"); 
         })
 
+        $('.maxHundred').keyup(function(){
+          var this_val = $(this).val();
+          if(this_val > 100){
+            //alert(this_val);
+            $(this).val('100');
+            return false;
+          }else{
+
+          }
+        })
+
       })
+
     </script>
 
 </html>
