@@ -1,3 +1,11 @@
+<?php
+
+  $CI =& get_instance();
+  $CI->load->model('M_crud');
+  $result = $CI->M_crud->get_where('SP_USER', array('email' => $this->session->userdata('data_user')[0]['email']));
+  $latest_profile = $result->result_array();
+
+  ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -42,11 +50,11 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="<?=base_url()?>assets/template/images/img.jpg" alt="..." class="img-circle profile_img">
+                <img src="<?=$latest_profile[0]['image']?>" alt="" class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
-                <h2><?=$this->session->userdata('first_name')?> <?=$this->session->userdata('last_name')?></h2>
+                <h2><?=$latest_profile[0]['first_name']?> <?=$latest_profile[0]['last_name']?></h2>
               </div>
             </div>
             <!-- /menu profile quick info -->
@@ -125,7 +133,7 @@
               <ul class=" navbar-right">
                 <li class="nav-item dropdown open" style="padding-left: 15px;">
                   <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                    <img src="<?=base_url()?>assets/template/images/img.jpg" alt=""><?=$this->session->userdata('data_user')[0]['first_name']?> <?=$this->session->userdata('data_user')[0]['last_name']?>
+                    <img src="<?=base_url().$latest_profile[0]['image']?>" alt=""><?=$latest_profile[0]['first_name']?> <?=$latest_profile[0]['last_name']?>
                   </a>
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="<?=base_url()?>profile"> Profile</a>
@@ -146,7 +154,7 @@
                   <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
                     <li class="nav-item">
                       <a class="dropdown-item">
-                        <span class="image"><img src="<?=base_url()?>assets/template/images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src="<?=$latest_profile[0]['image']?>" alt="" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -158,7 +166,7 @@
                     </li>
                     <li class="nav-item">
                       <a class="dropdown-item">
-                        <span class="image"><img src="<?=base_url()?>assets/template/images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src="<?=$latest_profile[0]['image']?>" alt="" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -170,7 +178,7 @@
                     </li>
                     <li class="nav-item">
                       <a class="dropdown-item">
-                        <span class="image"><img src="<?=base_url()?>assets/template/images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src="<?=$latest_profile[0]['image']?>" alt="" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
@@ -182,7 +190,7 @@
                     </li>
                     <li class="nav-item">
                       <a class="dropdown-item">
-                        <span class="image"><img src="<?=base_url()?>assets/template/images/img.jpg" alt="Profile Image" /></span>
+                        <span class="image"><img src="<?=$latest_profile[0]['image']?>" alt="" /></span>
                         <span>
                           <span>John Smith</span>
                           <span class="time">3 mins ago</span>
