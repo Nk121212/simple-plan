@@ -8,7 +8,7 @@ class Helper extends CI_Controller {
 		$this->load->model('M_crud');
 
 		$where = array(
-			'email_user' => $this->session->userdata('email')
+			'email_user' => $this->session->userdata('data_user')[0]['email']
 		);
 
 		$a = $this->M_crud->get_where('SP_PURPOSE', $where);

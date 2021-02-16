@@ -11,7 +11,7 @@ class Json_print extends CI_Controller {
 		header('content-type:application/json');
 
         $where = array(
-            'email_user' => $this->session->userdata('email')
+            'email_user' => $this->session->userdata('data_user')[0]['email']
         );
     
         $purpose_count = $this->M_crud->get_where('SP_PURPOSE', $where);
@@ -81,7 +81,7 @@ class Json_print extends CI_Controller {
         );
 
         $where = array(
-            'email_helper' => $this->session->userdata('email')
+            'email_helper' => $this->session->userdata('data_user')[0]['email']
         );
 
         $select = 'SP_TASK_PURPOSE.*, SP_TASK_PURPOSE.comment as task_comment, SP_PURPOSE.*, SP_TASK_PROGRESS.*, SP_TASK_PURPOSE.attachment as attachment_task, SP_TASK_PURPOSE.start_date as task_start, SP_TASK_PURPOSE.end_date as task_finish';
@@ -202,7 +202,7 @@ class Json_print extends CI_Controller {
 		);
 
         $where = array(
-			'SP_PURPOSE_HELPER.email_helper' => $this->session->userdata('email')
+			'SP_PURPOSE_HELPER.email_helper' => $this->session->userdata('data_user')[0]['email']
 		);
 
         $request_count = $this->M_crud->join_multiple_table($param, $where, 'SP_PURPOSE_HELPER.id_purpose');

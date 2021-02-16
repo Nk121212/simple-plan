@@ -30,13 +30,13 @@ class Home extends CI_Controller {
 		);
 
 		$where = array(
-			'SP_PURPOSE_HELPER.email_helper' => $this->session->userdata('email')
+			'SP_PURPOSE_HELPER.email_helper' => $this->session->userdata('data_user')[0]['email']
 		);
 
 		$request_help = $this->M_crud->join_multiple_table($param, $where, 'SP_PURPOSE_HELPER.id_purpose', '', '5', '', 'SP_PURPOSE.add_at', 'DESC');
 
 		$where_email = array(
-			'email_user' => $this->session->userdata('email')
+			'email_user' => $this->session->userdata('data_user')[0]['email']
 		);
 
 		$get_id_purpose = $this->M_crud->get_where('SP_PURPOSE', $where_email);

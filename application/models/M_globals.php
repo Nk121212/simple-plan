@@ -7,7 +7,7 @@ class M_globals extends CI_Model{
     	$this->load->library('upload');
 
         $config['upload_path']          = $upload_path;
-        $config['allowed_types']        = '*';
+        $config['allowed_types']        = 'pdf|PDF|jpg|JPG|jpeg|JPEG|png|PNG';
         $config['max_size']             = 1300;
         $config['max_width']            = 6000;
         $config['max_height']           = 6000;
@@ -37,9 +37,9 @@ class M_globals extends CI_Model{
                 $data = array('upload_data' => $this->upload->data());
 				$arr = array(
                 	'status' => 'ok',
-                	'message' => 'upload success',
+                	'message' => 'Upload Success',
                 	'image_path' => $config['upload_path'].$this->upload->data('file_name'),
-                	'color' => 'primary'
+                	'color' => 'success'
                 );
 
                 return $arr;

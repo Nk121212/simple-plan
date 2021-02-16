@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	        $this->load->model('M_crud');
 
-	        $data_helper = $this->M_crud->get_my_helper($this->session->userdata('email'));
+	        $data_helper = $this->M_crud->get_my_helper($this->session->userdata('data_user')[0]['email']);
 
 	        if($id==''){
 
@@ -55,7 +55,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 			if($upload['status'] == 'ok'){
 
-				$insert = $this->M_crud->post_insert('SP_PURPOSE', $this->input->post(), array('attachment' => $upload['image_path'], 'email_user' => $this->session->userdata('email')));
+				$insert = $this->M_crud->post_insert('SP_PURPOSE', $this->input->post(), array('attachment' => $upload['image_path'], 'email_user' => $this->session->userdata('data_user')[0]['email']));
 
 	            $last_insert_id = $this->db->insert_id();
 
@@ -83,7 +83,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	        $this->load->model('M_crud');
 
-	        $data_helper = $this->M_crud->get_my_helper($this->session->userdata('email'));
+	        $data_helper = $this->M_crud->get_my_helper($this->session->userdata('data_user')[0]['email']);
 
 	        if($id==''){
 

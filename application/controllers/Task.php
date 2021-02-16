@@ -9,7 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$this->load->model('M_crud');
 
 			$where = array(
-	            'email_helper' => $this->session->userdata('email')
+	            'email_helper' => $this->session->userdata('data_user')[0]['email']
 	        );
 
 			$my_purpose = $this->M_crud->get_where('SP_PURPOSE_HELPER', $where);
@@ -43,7 +43,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$task = $this->input->post('task');
 			$upload = $this->M_globals->do_upload('upload/task/', $task);
 
-			$logged_in_email = $this->session->userdata('email');
+			$logged_in_email = $this->session->userdata('data_user')[0]['email'];
 			$post_data = array_merge($this->input->post(), array('email_helper' => $logged_in_email));
 			$insert = $this->M_crud->post_insert('SP_TASK_PURPOSE', $post_data, array('attachment' => $upload['image_path']));
 
@@ -70,7 +70,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$this->load->model('M_crud');
 
 			$where = array(
-	            'email_helper' => $this->session->userdata('email')
+	            'email_helper' => $this->session->userdata('data_user')[0]['email']
 	        );
 
 			$my_purpose = $this->M_crud->get_where('SP_PURPOSE_HELPER', $where);
@@ -146,7 +146,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$this->load->model('M_crud');
 
 			$where = array(
-				'email_user' => $this->session->userdata('email')
+				'email_user' => $this->session->userdata('data_user')[0]['email']
 			);
 
 			$my_purpose = $this->M_crud->get_where('SP_PURPOSE', $where);
@@ -164,7 +164,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$task = $this->input->post('task');
 			$upload = $this->M_globals->do_upload('upload/task/', $task);
 
-			//$logged_in_email = $this->session->userdata('email');
+			//$logged_in_email = $this->session->userdata('data_user')[0]['email'];
 			$post_data = $this->input->post();
 			$insert = $this->M_crud->post_insert('SP_TASK_PURPOSE', $post_data, array('attachment' => $upload['image_path']));
 

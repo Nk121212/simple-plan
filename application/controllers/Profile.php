@@ -51,11 +51,13 @@ class Profile extends CI_Controller {
 
         if($update){
             //jika update sukses
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Update Profile Berhasil !</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Update Profile Success !</div>
+            <div class="alert alert-'.$upload['color'].'" role="alert">'.ucfirst($upload['message']).'</div>');
             
         }else{
 
-            $this->session->set_flashdata('message', '<div class="alert alert-'.$upload['color'].'" role="alert">Update Profile Gagal ! <br> '.$upload['message'].'</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Update Profile Gagal !</div>
+            <div class="alert alert-'.$upload['color'].'" role="alert">'.ucfirst($upload['message']).' !</div>');
 
         }
 
