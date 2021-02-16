@@ -98,9 +98,7 @@ class Auth extends CI_Controller {
 				//echo 'verifiy oke';
 
 				$data_login = array(
-					'email' => $check->row()->email,
-					'first_name' => $check->row()->first_name,
-					'last_name' => $check->row()->last_name,
+					'data_user' => $check->result_array(),
 					'login' => true
 				);
 

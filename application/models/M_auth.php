@@ -21,11 +21,13 @@ class M_auth extends CI_Model{
 
 	public function save_user($array){
 
+		$my_array = xssPrevent($array);
+
 		$data = array(
-			'email' => $array['email'],
-			'first_name' => $array['first_name'],
-			'last_name' => $array['last_name'],
-			'password' => password_hash($array['password'], PASSWORD_DEFAULT)
+			'email' => $my_array['email'],
+			'first_name' => $my_array['first_name'],
+			'last_name' => $my_array['last_name'],
+			'password' => password_hash($my_array['password'], PASSWORD_DEFAULT)
 		);
 
 		$query = $this->db->replace('SP_USER', $data);

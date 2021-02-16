@@ -86,13 +86,13 @@ class Json_print extends CI_Controller {
 
         $select = 'SP_TASK_PURPOSE.*, SP_TASK_PURPOSE.comment as task_comment, SP_PURPOSE.*, SP_TASK_PROGRESS.*, SP_TASK_PURPOSE.attachment as attachment_task, SP_TASK_PURPOSE.start_date as task_start, SP_TASK_PURPOSE.end_date as task_finish';
 
-        $task_count = $this->M_crud->join_multiple_table($param, $where, 'sp_task_purpose.id', '', '', $select);
+        $task_count = $this->M_crud->join_multiple_table($param, $where, 'SP_TASK_PURPOSE.id', '', '', $select);
 
         $total_task = count($task_count->result());
 
         $offset = $this->input->post('start') ? $this->input->post('start') : 0;
 
-        $task_paging = $this->M_crud->join_multiple_table($param, $where, 'sp_task_purpose.id', $offset, '10', $select);
+        $task_paging = $this->M_crud->join_multiple_table($param, $where, 'SP_TASK_PURPOSE.id', $offset, '10', $select);
         //$task_paging = $this->M_crud->join_2_table('SP_TASK_PURPOSE', 'SP_PURPOSE', 'id_purpose', 'id', '', 'SP_TASK_PURPOSE.id', $offset, '10', $select);
 
         $data = array(

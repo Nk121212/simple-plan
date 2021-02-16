@@ -125,10 +125,10 @@
               <ul class=" navbar-right">
                 <li class="nav-item dropdown open" style="padding-left: 15px;">
                   <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                    <img src="<?=base_url()?>assets/template/images/img.jpg" alt=""><?=$this->session->userdata('first_name')?> <?=$this->session->userdata('last_name')?>
+                    <img src="<?=base_url()?>assets/template/images/img.jpg" alt=""><?=$this->session->userdata('data_user')[0]['first_name']?> <?=$this->session->userdata('data_user')[0]['last_name']?>
                   </a>
                   <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item"  href="javascript:;"> Profile</a>
+                    <a class="dropdown-item" href="<?=base_url()?>profile"> Profile</a>
                       <!--a class="dropdown-item"  href="javascript:;">
                         <span class="badge bg-red pull-right">50%</span>
                         <span>Settings</span>

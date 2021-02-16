@@ -3,8 +3,8 @@
 $config['email'] = array(
     'protocol'  =>  'smtp',
     'smtp_host' =>  'ssl://mail.visindometadata.com',
-    'smtp_user' =>  'kahfi@visindometadata.com',
-    'smtp_pass' =>  'eJ;Q]pOMEbF0',
+    'smtp_user' =>  'cs@visindometadata.com',
+    'smtp_pass' =>  'HNJksEd4Oq2U',
     'smtp_port' =>  '465',
     'mailtype' => 'html'
 );

@@ -22,7 +22,8 @@ class M_globals extends CI_Model{
         {
                 $error = array('error' => $this->upload->display_errors());
                 $arr = array(
-                	'status' => 'error',
+                    'status' => 'error',
+                    'image_path' => '',
                 	'message' => $this->upload->display_errors(),
                 	'color' => 'danger'
                 );

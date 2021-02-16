@@ -74,7 +74,7 @@ class M_crud extends CI_Model{
 	}
 
 	public function delete($table, $where){
-		$this->db->delete($table, $where);
+		$this->db->delete($table, xssPrevent($where));
 		return $this;
 	}
 
@@ -118,6 +118,17 @@ class M_crud extends CI_Model{
 		$query = $this->db->get();
 		return $query;
 		
+	}
+
+	public function update($table, $setData){
+
+		$data = xssPrevent($setData);
+		
+		$this->db->where('email', $this->session->userdata('data_user')[0]['email']);
+		$this->db->update($table, $data);
+
+		return $this;
+
 	}
 
 }

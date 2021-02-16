@@ -49,11 +49,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 			if(!$insert){
 
-				$this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Failed, Create Task Gagal !</div>');
+				$this->session->set_flashdata('message', '<div class="alert alert-'.$upload['status'].'" role="alert">'.$upload['status'].', Create Task Gagal !, '.$upload['message'].'</div>');
 
 			}else{
 
-				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Create Task Berhasil !</div>');
+				$this->session->set_flashdata('message', '<div class="alert alert-'.$upload['status'].'" role="alert">'.$upload['status'].', Create Task Berhasil !, , '.$upload['message'].'</div>');
 
 			}
 
