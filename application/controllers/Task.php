@@ -53,6 +53,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 			}else{
 
+				$dataProgressAwal = array(
+					'id_purpose' => $this->input->post('id_purpose'),
+					'id_task' => $this->db->insert_id(),
+					'progress' => 0,
+				);
+				
+				$addToProgress = $this->M_crud->post_replace('SP_TASK_PROGRESS', $dataProgressAwal);
 				$this->session->set_flashdata('message', '<div class="alert alert-'.$upload['status'].'" role="alert">'.$upload['status'].', Create Task Berhasil !, , '.$upload['message'].'</div>');
 
 			}
