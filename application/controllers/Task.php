@@ -134,14 +134,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		public function submit_progress(){
 
 			$this->load->model('M_crud');
+			$this->load->model('M_globals');
+
+			$upload = $this->M_globals->do_upload('upload/task/progress/', $this->input->post('progress'));
 
 			$postData = $this->input->post();
 
-			$query = $this->M_crud->post_replace('SP_TASK_PROGRESS', $postData);
+			$merge = array_merge($postData, array('attachment' => $upload['image_path']));
+
+			//replace ke tabel sp task progress
+			$query = $this->M_crud->post_replace('SP_TASK_PROGRESS', $merge);
 
 			if($query){
 
-				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Update progress persentase task </div>');
+				//insert ke tabel sp task progress log
+				$insert_log = $this->M_crud->post_insert('SP_TASK_PROGRESS_LOG', $merge);
+
+				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Update Progress Persentase Task </div>
+				<div class="alert alert-'.$upload['color'].'" role="alert">Attachment '.ucfirst($upload['status']).', '.$upload['message'].' </div>');
 
 				redirect(base_url().'task/update_task');
 
@@ -181,6 +191,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 			}else{
 
+				$dataProgressAwal = array(
+					'id_purpose' => $this->input->post('id_purpose'),
+					'id_task' => $this->db->insert_id(),
+					'progress' => 0,
+				);
+				
+				$addToProgress = $this->M_crud->post_replace('SP_TASK_PROGRESS', $dataProgressAwal);
 				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Forward Task Berhasil</div>');
 
 			}
