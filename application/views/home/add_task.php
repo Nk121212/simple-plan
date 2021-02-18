@@ -66,11 +66,11 @@
                     <div class="col-md-6">
                         <hr>
                         <label for="">Attachment :</label>
-                        <input type="file" name="upload" class="form-control" required>
+                        <input type="file" name="upload" class="form-control">
                     </div>
                     <div class="col-md-12">
                         <hr>
-                        <textarea class="form-control" placeholder="Comment" name="comment" required></textarea>
+                        <textarea class="form-control" placeholder="Comment" name="comment"></textarea>
                     </div>
                     <div class="col-md-6">
                         <hr>

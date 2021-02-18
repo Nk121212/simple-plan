@@ -105,8 +105,8 @@
     $('form#frmProgress').each(function(){
         $(this).submit(function(e){
 
-            var recent = $('#recent_progress').val();
-            var now = $('#progress').val();
+            var recent = parseInt($('#recent_progress').val());
+            var now = parseInt($('#progress').val());
 
             if(now <= recent){
                 e.preventDefault();

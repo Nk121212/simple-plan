@@ -36,8 +36,8 @@ $(function () {
 		    serverMethod: 'post',
 		    columns: [
 		        {data: "email"},
-		        {data: "first_name"},
-		        {data: "last_name"},
+                {data: "name"},
+                {data: "progress"},
 		        {data: "action", orderable:false, className: "dt-body-center"}
 		    ]
 		});
@@ -98,6 +98,65 @@ $(function () {
             }
 
         });
+
+    });
+
+    $('#table_helper tbody').on('click', 'tr td a.view-task', function () {
+        //var data = table.row( this ).data();
+        var param = $(this).attr('param');
+
+        var enc_mail = atob(param);
+
+        //alert(enc_mail);
+
+        var exp = enc_mail.split("_");
+
+        var mail_helper = exp[1];
+
+        //alert(mail_helper);
+
+        $('.div-task').removeClass('hidden');
+
+        $('#helper_mail').text('Helper : '+mail_helper);
+
+        $('#table_task').DataTable().destroy();
+
+    	var dataTable = $('#table_task').DataTable( {
+		    ajax: {
+		        url: base_url+"json_print/list_task_by_helper/"+param+"",
+		        data: function(data){
+
+		        },
+		        dataSrc: 'data',
+		    },
+		    searching: false,
+		    fnInfoCallback: function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+		        return "Menampilkan "+iStart+" Sampai "+iEnd+" Dari "+(oSettings.json ? oSettings.json.recordsTotal : iTotal)+" Data";
+		    },
+		    pagingType: 'full_numbers',
+		    language: {paginate: {
+		        first: '<i class="fa fa-step-backward"></i>',
+		        last: '<i class="fa fa-step-forward"></i>',
+		        previous: '<i class="fa fa-backward"></i>',
+		        next: '<i class="fa fa-forward"></i>',
+		    }},
+		    paging: true,
+		    order: [[ 2, "asc" ]],
+		    dom: 'tip',
+		    pageLength: 25,
+		    serverSide: true,
+		    serverMethod: 'post',
+		    columns: [
+		        //{data: "id"},
+                {data: "task"},
+                {data: "start"},
+                {data: "end"},
+                {data: "interval"},
+                {data: "progress"},
+		        //{data: "action", orderable:false, className: "dt-body-center"}
+		    ]
+		});
+        
 
     });
     

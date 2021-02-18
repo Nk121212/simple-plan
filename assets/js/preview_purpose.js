@@ -30,8 +30,10 @@ $(function () {
 	    serverMethod: 'post',
 	    columns: [
 	        {data: "purpose"},
-	        {data: "helper"},
-	        {data: "action", orderable:false, className: "dt-body-center"}
+			{data: "helper"},
+			{data: "progress"},
+			{data: "action", orderable:false, className: "dt-body-center"},
+			
 	    ]
 	});
 

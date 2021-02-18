@@ -46,6 +46,7 @@ class Helper extends CI_Controller {
 			);
 
 			$delete_progress = $this->M_crud->delete('SP_TASK_PROGRESS', $where_array);
+			$delete_progress_log = $this->M_crud->delete('SP_TASK_PROGRESS_LOG', $where_array);
 
 		}
 

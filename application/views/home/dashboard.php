@@ -98,6 +98,9 @@
                         <th>Purpose</th>
                         <th>Total Task</th>
                         <th>Progress</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Interval</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -107,7 +110,7 @@
                       if(empty($progress)){
                         echo '
                           <tr style="background-color:red;color:white;">
-                            <td colspan="3">No Data</td>
+                            <td colspan="6">No Data</td>
                           </tr>
                         ';
                       }else{
@@ -116,8 +119,11 @@
                           echo '
                             <tr>
                               <td>'.$value['purpose'].'</td>
-                              <td>'.$value['total_task'].'</td>
+                              <td><a href="'.base_url().'task/task_by_helper/'.base64_encode($value['id_purpose']).'" class="btn btn-sm btn-primary">'.$value['total_task'].' Task</a></td>
                               <td>'.$value['progress'].' %</td>
+                              <td>'.$value['start'].'</td>
+                              <td>'.$value['end'].'</td>
+                              <td>'.$value['interval'].'</td>
                             </tr>
                           ';
                         }

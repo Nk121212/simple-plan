@@ -49,7 +49,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 			if(!$insert){
 
-				$this->session->set_flashdata('message', '<div class="alert alert-'.$upload['status'].'" role="alert">'.$upload['status'].', Create Task Gagal !, '.$upload['message'].'</div>');
+				$this->session->set_flashdata('message', '<div class="alert alert-'.$upload['color'].'" role="alert">'.ucfirst($upload['status']).', Create Task Gagal !</div>
+				<div class="alert alert-'.$upload['color'].'" role="alert">Attachment '.ucfirst($upload['status']).' '.$upload['message'].'</div>');
 
 			}else{
 
@@ -60,7 +61,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				);
 				
 				$addToProgress = $this->M_crud->post_replace('SP_TASK_PROGRESS', $dataProgressAwal);
-				$this->session->set_flashdata('message', '<div class="alert alert-'.$upload['status'].'" role="alert">'.$upload['status'].', Create Task Berhasil !, , '.$upload['message'].'</div>');
+				$this->session->set_flashdata('message', '<div class="alert alert-'.$upload['color'].'" role="alert">'.ucfirst($upload['status']).', Create Task Berhasil !</div>
+				<div class="alert alert-'.$upload['color'].'" role="alert">Attachment '.ucfirst($upload['status']).' '.$upload['message'].'</div>');
 
 			}
 
@@ -110,7 +112,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			header('content-type:application/json');
 
 			$where_purpose = array(
-				'id_purpose' => $this->input->post('id_purpose')
+				'id_purpose' => $this->input->post('id_purpose'),
+				'email_helper' => $this->session->userdata('data_user')[0]['email']
 			);
 
 			$my_task = $this->M_crud->get_where('SP_TASK_PURPOSE', $where_purpose);

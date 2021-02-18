@@ -78,10 +78,25 @@ class M_crud extends CI_Model{
 		return $this;
 	}
 
+	public function delete_where_in($table, $where, $where_not_in_field='', $where_not_in=''){
+		$this->db->where($where);
+		$where_not_in == '' ? '' : $this->db->where_not_in($where_not_in_field, $where_not_in);
+		$this->db->delete($table);
+	}
+
 	public function get_where_in($table, $field_in, $value_field_in){
 		$this->db->select('*');
 		$this->db->from($table);
 		$this->db->where_in($field_in, $value_field_in);
+		$query = $this->db->get();
+		return $query;
+	}
+
+	public function get_where_not_in($table, $field_in, $value_field_in, $where=''){
+		$this->db->select('*');
+		$this->db->from($table);
+		$where == '' ? '' : $this->db->where($where);
+		$this->db->where_not_in($field_in, $value_field_in);
 		$query = $this->db->get();
 		return $query;
 	}
@@ -129,6 +144,14 @@ class M_crud extends CI_Model{
 
 		return $this;
 
+	}
+
+	public function get_progress_every_helper($id_purpose, $email_helper){
+		$this->db->select('*');
+		$this->db->from('SP_TASK_PURPOSE');
+		$this->db->join('SP_TASK_PROGRESS', 'SP_TASK_PURPOSE.id_purpose = SP_TASK_PROGRESS.id_purpose AND SP_TASK_PURPOSE.id = SP_TASK_PROGRESS.id_task');
+		$this->db->where(array('SP_TASK_PURPOSE.id_purpose' => $id_purpose, 'SP_TASK_PURPOSE.email_helper' => $email_helper));
+		return $this->db->get();
 	}
 
 }

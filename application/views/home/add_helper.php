@@ -20,7 +20,7 @@
             <?=$this->session->flashdata('message')?>
         </div>
 
-        <form method="post" action="<?=base_url()?>purpose/submit_helper">
+        <form id="frmAddHelper" method="post" action="<?=base_url()?>purpose/submit_helper">
 
             <input type="hidden" name="id_purpose" value="<?=$id_purpose?>">
 
@@ -93,7 +93,31 @@
 </div>
 
 <script type="text/javascript">
+
     $(document).ready(function(){
+
+        $('form#frmAddHelper').each(function(){
+
+            $(this).submit(function(e){
+
+                var r = confirm("Anda yakin mengupdate helper ?");
+                if (r == true) {
+                    //e.preventDefault();
+                    var z = confirm("ketika ada helper yang dihilangkan centangnya, maka semua task dan progress helper tersebut akan dihapus !");
+                    
+                    if (z == true){
+                        return true;
+                    }else{
+                        e.preventDefault();
+                    }
+                    
+                } else {
+                    e.preventDefault();
+                } 
+
+            })    
+            
+        })
 
         $('.selectpicker').selectpicker('val', <?=json_encode($helper)?>);
         

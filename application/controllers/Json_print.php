@@ -30,19 +30,43 @@ class Json_print extends CI_Controller {
         );
 
         $i=1;
+        $array_progress = array();
         foreach($purpose_paging->result() as $dt_pp){
+
+            $get_task_by_id_purpose = $this->M_crud->get_where('SP_TASK_PURPOSE', array('id_purpose' => $dt_pp->id));
+
+			$total = $get_task_by_id_purpose->num_rows() == 0 ? 100 : $get_task_by_id_purpose->num_rows();
+
+			$percent_every_task = (100/$total);
+
+			$getTaskByIdPurpose = $this->M_crud->get_where('SP_TASK_PROGRESS', array('id_purpose' => $dt_pp->id));
+
+			$total_progress = 0;
+			foreach ($getTaskByIdPurpose->result() as $key => $dtprog) {
+				$total_progress += ($dtprog->progress/100)*$percent_every_task;
+			}
 
             $arr = array(
                 'id_purpose' => $dt_pp->id
             );
 
-        	$get_helper = $this->M_crud->get_where('SP_PURPOSE_HELPER', $arr);
+            $get_helper = $this->M_crud->get_where('SP_PURPOSE_HELPER', $arr);
+            
+            $diff = abs(strtotime($dt_pp->end_date) - strtotime($dt_pp->start_date));
+
+            $years = floor($diff / (365*60*60*24));
+            $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+            $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
 
             $data['data'][] = array(
                 'id' => $dt_pp->id,
                 'purpose' => $dt_pp->purpose,
                 'helper' => '<a href="" class="btn btn-sm btn-primary">'.$get_helper->num_rows().' Helper</a>',
-                'action' => '<a href="'.base_url().'purpose/add_helper/'.base64_encode($dt_pp->id).'" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Helper</a>'
+                'action' => '<a href="'.base_url().'purpose/add_helper/'.base64_encode($dt_pp->id).'" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Helper</a>',
+                'progress' => round($total_progress, 2).' %',
+                'start' => date('d M Y', strtotime($dt_pp->start_date)),
+                'end' => date('d M Y', strtotime($dt_pp->end_date)),
+                'interval' => $years.' Tahun '. $months.' Bulan '. $days.' Hari'
             );
 
             $i++;
@@ -106,7 +130,7 @@ class Json_print extends CI_Controller {
         $i=1;
         foreach($task_paging->result() as $dt_task){
 
-            $diff = abs(strtotime($dt_task->end_date) - strtotime($dt_task->start_date));
+            $diff = abs(strtotime($dt_task->task_finish) - strtotime($dt_task->task_start));
 
             $years = floor($diff / (365*60*60*24));
             $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
@@ -160,12 +184,24 @@ class Json_print extends CI_Controller {
 
         foreach($helper_paging->result() as $dt_helper){
 
+            $query_get_progress = $this->M_crud->get_progress_every_helper($dt_helper->id_purpose, $dt_helper->email_helper);
+
+            $total_task = $query_get_progress->num_rows();
+
+            $progress = $query_get_progress->num_rows() < 1 ? 0 : $query_get_progress->row()->progress;
+            
+            $hitung = $total_task == 0 ? '0' : (100/$total_task);
+            $progress_each_helper = ($progress/100)*$hitung;
+
             $data['data'][] = array(
                 'id_purpose' => $dt_helper->id_purpose,
                 'email' => $dt_helper->email_helper,
-                'first_name' => $dt_helper->first_name,
-                'last_name' => $dt_helper->last_name,
-                'action' => '<a href="#" class="btn btn-sm btn-danger text-white delete" id-purpose="'.$dt_helper->id_purpose.'" email-helper="'.$dt_helper->email_helper.'"><i class="fa fa-trash"></i> Helper</a>'
+                'name' => $dt_helper->first_name.' '.$dt_helper->last_name,
+                'progress' => $progress_each_helper. ' %',
+                'action' => '
+                <a class="btn btn-sm btn-info text-white view-task" param="'.base64_encode($dt_helper->id_purpose.'_'.$dt_helper->email_helper).'"><i class="fa fa-eye"></i> Task</a>
+                <a class="btn btn-sm btn-danger text-white delete" id-purpose="'.$dt_helper->id_purpose.'" email-helper="'.$dt_helper->email_helper.'"><i class="fa fa-trash"></i> Helper</a>
+                '
             );
 
         }
@@ -242,6 +278,66 @@ class Json_print extends CI_Controller {
 
         echo json_encode($data, JSON_PRETTY_PRINT);
     }
+
+    public function list_task_by_helper($param){
+
+		$this->load->model('M_crud');
+
+        header('content-type:application/json');
+        
+        $explode = explode("_", base64_decode($param));
+        $id_purpose = $explode[0];
+        $email_helper = $explode[1];
+
+        $where = array(
+            'id_purpose' => $id_purpose,
+            'email_helper' => $email_helper
+        );
+    
+        $task_count = $this->M_crud->get_where('SP_TASK_PURPOSE', $where);
+        $total_task = count($task_count->result());
+
+        $offset = $this->input->post('start') ? $this->input->post('start') : 0;
+
+        $task_paging = $this->M_crud->get_where('SP_TASK_PURPOSE', $where, $offset, '10');
+
+        $data = array(
+            'response_real'=>$task_paging->result(),
+            'recordsTotal' => $total_task,
+            'recordsFiltered' => $total_task,
+            'data' => array()
+        );
+
+        $i=1;
+        $array_progress = array();
+        foreach($task_paging->result() as $dt_task){
+
+            $get_progress_by_idp_idt = $this->M_crud->get_where('SP_TASK_PROGRESS', array('id_purpose' => $id_purpose, 'id_task' => $dt_task->id));
+
+            $progress_task = $get_progress_by_idp_idt->row()->progress;
+
+            $diff = abs(strtotime($dt_task->end_date) - strtotime($dt_task->start_date));
+
+            $years = floor($diff / (365*60*60*24));
+            $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+            $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+
+            $data['data'][] = array(
+                'id' => $dt_task->id,
+                'task' => $dt_task->task,
+                'start' => date("d M Y", strtotime($dt_task->start_date)),
+                'end' => date("d M Y", strtotime($dt_task->end_date)),
+                'interval' => $years.' Tahun '. $months.' Bulan '. $days.' Hari',
+                'progress' => $progress_task.' %'
+            );
+
+            $i++;
+
+        }
+
+        echo json_encode($data, JSON_PRETTY_PRINT);
+
+	}
 
 
 }

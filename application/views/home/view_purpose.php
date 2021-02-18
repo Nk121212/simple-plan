@@ -27,9 +27,10 @@
         <table class="table table-borderless text-center" id="table_purpose">
             <thead>
                 <tr>
-                    <th width="40%">Purpose</th>
-                    <th width="30%">Helper</th>
-                    <th width="30%">Action</th>
+                    <th>Purpose</th>
+                    <th>Helper</th>
+                    <th>Progress</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>

@@ -57,10 +57,20 @@ class Home extends CI_Controller {
 				$total_progress += ($dtprog->progress/100)*$percent_every_task;
 			}
 
+			$diff = abs(strtotime($value->end_date) - strtotime($value->start_date));
+
+            $years = floor($diff / (365*60*60*24));
+            $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+            $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+
 			$array_progress[] = array(
+				'id_purpose' => $value->id,
 				'purpose' => $value->purpose,
 				'progress' => round($total_progress, 2),
-				'total_task' => $get_task_by_id_purpose->num_rows()
+				'total_task' => $get_task_by_id_purpose->num_rows(),
+				'start' => date('d M Y', strtotime($value->start_date)),
+                'end' => date('d M Y', strtotime($value->end_date)),
+                'interval' => $years.' Tahun '. $months.' Bulan '. $days.' Hari'
 			);
 
 		}

@@ -120,12 +120,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$helper = $this->input->post('helper');
 
 			$i=0;
+			$email_helper = array();
 			foreach ($helper as $key => $value) {
-				$add_helper = $this->M_crud->post_insert('SP_PURPOSE_HELPER', array('id_purpose' => $this->input->post('id_purpose'), 'email_helper' => $value));
+				$add_helper = $this->M_crud->post_replace('SP_PURPOSE_HELPER', array('id_purpose' => $this->input->post('id_purpose'), 'email_helper' => $value));
 				$i++;
 			}
 
-			$this->session->set_flashdata('message', '<div class="alert alert-primary" role="alert">Success, Add Helper Berhasil</div>');
+			$get_helper_in_purpose = $this->M_crud->get_where('SP_PURPOSE_HELPER', array('id_purpose' => $this->input->post('id_purpose')));
+
+			$email_helper = array();
+			$i=0;
+			foreach ($get_helper_in_purpose->result() as $key => $value) {
+				$email_helper[$i] = $value->email_helper;
+				$i++;
+			}
+
+			$delete_task_unset_helper = $this->M_crud->delete_where_in('SP_TASK_PURPOSE', array('id_purpose' => $this->input->post('id_purpose')), 'email_helper', $email_helper);
+
+			$get_id_task_unset = $this->M_crud->get_where_not_in('SP_TASK_PURPOSE', 'email_helper', $email_helper, array('id_purpose' => $this->input->post('id_purpose')));
+
+			if(!empty($get_id_task_unset->result_array())){
+				foreach ($get_id_task_unset->result() as $key => $value) {
+					$id_task = $value->id_task;
+					//delete semua progress where id purpose = and id task =
+					$delete_progress = $this->M_crud->delete('SP_TASK_PROGRESS', array('id_purpose' => $this->input->post('id_purpose'), 'id_task' => $id_task));
+					$delete_progress_log = $this->M_crud->delete('SP_TASK_PROGRESS_LOG', array('id_purpose' => $this->input->post('id_purpose'), 'id_task' => $id_task));
+				}
+			}
+
+			$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Update Helper Berhasil</div>');
 
          	redirect('purpose/view_purpose');
 		}
