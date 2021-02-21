@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			if (empty($id_purpose_by_helper)){
 				$list_purpose = array();
 			} else {
-				$my_purpose = $this->M_crud->get_where_in('SP_PURPOSE', 'id', $id_purpose_by_helper);
+				$my_purpose = $this->M_crud->get_where_in('SP_PURPOSE', 'id', $id_purpose_by_helper, array('status' => 0));
 				$list_purpose = $my_purpose->result();
 
 			}
@@ -49,7 +49,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 			if(!$insert){
 
-				$this->session->set_flashdata('message', '<div class="alert alert-'.$upload['color'].'" role="alert">'.ucfirst($upload['status']).', Create Task Gagal !</div>
+				$this->session->set_flashdata('message', '<div class="alert alert-'.$upload['color'].'" role="alert">Create Task Gagal !</div>
 				<div class="alert alert-'.$upload['color'].'" role="alert">Attachment '.ucfirst($upload['status']).' '.$upload['message'].'</div>');
 
 			}else{
@@ -61,7 +61,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				);
 				
 				$addToProgress = $this->M_crud->post_replace('SP_TASK_PROGRESS', $dataProgressAwal);
-				$this->session->set_flashdata('message', '<div class="alert alert-'.$upload['color'].'" role="alert">'.ucfirst($upload['status']).', Create Task Berhasil !</div>
+				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Create Task Berhasil !</div>
 				<div class="alert alert-'.$upload['color'].'" role="alert">Attachment '.ucfirst($upload['status']).' '.$upload['message'].'</div>');
 
 			}
@@ -70,7 +70,32 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		}
 
 		public function view_task(){
-			$data = array('main' => 'home/view_task');
+
+			$this->load->model('M_crud');
+			
+			$where = array(
+	            'email_helper' => $this->session->userdata('data_user')[0]['email']
+	        );
+
+			$my_purpose = $this->M_crud->get_where('SP_PURPOSE_HELPER', $where);
+
+			$id_purpose_by_helper = array();
+			$i=0;
+			foreach ($my_purpose->result() as $key => $value) {
+				//echo $value->id_purpose;
+				$id_purpose_by_helper[$i] = $value->id_purpose;
+				$i++;
+			}
+
+			if (empty($id_purpose_by_helper)){
+				$list_purpose = array();
+			} else {
+				$my_purpose = $this->M_crud->get_where_in('SP_PURPOSE', 'id', $id_purpose_by_helper, array('status' => 0));
+				$list_purpose = $my_purpose->result();
+
+			}
+
+			$data = array('main' => 'home/view_task', 'purpose' => $list_purpose);
 			$this->load->view('home/home', $data);
 		}
 
@@ -153,6 +178,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				//insert ke tabel sp task progress log
 				$insert_log = $this->M_crud->post_insert('SP_TASK_PROGRESS_LOG', $merge);
 
+				$check_progress_all_task = $this->M_crud->get_progress_all_task($this->input->post('id_purpose'));
+
+				$progress_all_task = array();
+				$i=0;
+				foreach ($check_progress_all_task->result() as $key => $value) {
+					$progress_all_task[$i] = $value->progress; 
+					$i++;
+				}
+
+				//print_r($progress_all_task);
+
+				if(min($progress_all_task) < 100) {
+					//echo 'ada yg kurang dari seratus bung';
+				}else{
+					//update status purpose = 1
+					$closePurpose = $this->M_crud->dinamicUpdate('SP_PURPOSE', array('status' => 1), array('id' => $this->input->post('id_purpose')));
+				}
+
 				$this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Success, Update Progress Persentase Task </div>
 				<div class="alert alert-'.$upload['color'].'" role="alert">Attachment '.ucfirst($upload['status']).', '.$upload['message'].' </div>');
 
@@ -166,7 +209,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$this->load->model('M_crud');
 
 			$where = array(
-				'email_user' => $this->session->userdata('data_user')[0]['email']
+				'email_user' => $this->session->userdata('data_user')[0]['email'],
+				'status' => 0
 			);
 
 			$my_purpose = $this->M_crud->get_where('SP_PURPOSE', $where);
@@ -218,6 +262,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 			$progress = isset($query->row()->progress) ? $query->row()->progress : 0;
 			echo $progress;
+
+		}
+
+		public function getMyTask(){
+
+			header('content-type:application/json');
+
+			$this->load->model('M_crud');
+
+			$postData = $this->input->post();
+			//print_r($postData);
+			$getTask = $this->M_crud->get_where('SP_TASK_PURPOSE', $postData);
+
+			echo json_encode($getTask->result(), JSON_PRETTY_PRINT);
 
 		}
 

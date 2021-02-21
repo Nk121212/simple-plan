@@ -3,6 +3,9 @@
         pointer-events: none;
         cursor: default;
     }
+    .hidden{
+        display:none;
+    }
 </style>
 <div class="col-md-12 col-sm-4 ">
   <div class="x_panel tile">
@@ -55,6 +58,10 @@
                         </div>
                     </div>
 
+                    <div class="col-md-12 text-center chart-history hidden">
+                        <canvas id="myChart" width="800" height="400"></canvas>
+                    </div>
+
                     <div class="col-md-6">
                         <hr>
                         <label for="">Attachment :</label>
@@ -100,6 +107,8 @@
 
 </div>
 
+<script type="text/javascript" src="<?=base_url()?>assets/template/vendor/Chart.js/dist/Chart.bundle.js"></script>
+
 <script type="text/javascript">
 
     $('form#frmProgress').each(function(){
@@ -125,6 +134,7 @@
 
         $('#id_purpose').change(function(){
 
+            $('.chart-history').addClass('hidden');
             $('#id_task').html('');
 
             var id_purpose = $(this).val();
@@ -142,9 +152,84 @@
         })
 
         $('#id_task').change(function(){
-            
+
+            $('.chart-history').removeClass('hidden');
+
             var id_purpose = $('#id_purpose').val();
             var id_task = $(this).val();
+
+            $.post("<?=base_url()?>json_print/getDataHistoryProgress",
+            {
+                id_purpose: id_purpose,
+                id_task: id_task,
+            },
+            function(resp){
+
+                var randomColorFactor = function() {
+                    return Math.round(Math.random() * 255);
+                };
+                var randomColor = function() {
+                    return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',.7)';
+                };
+
+                var ctx = document.getElementById("myChart");
+
+                var Graph_config = {
+                    type: 'bar',
+                    data: {
+                        //labels: ["2015-01", "2015-02", "2015-03", "2015-04", "2015-05", "2015-06", "2015-07", "2015-08", "2015-09", "2015-10", "2015-11", "2015-12"],
+                        labels: resp.label,
+                        datasets: [{
+                        label: '# History Progress',
+                        //data: [12, 19, 3, 5, 2, 3, 20, 3, 5, 6, 2, 1],
+                        data: resp.data,
+                        backgroundColor: resp.color,
+                        borderColor: resp.color,
+                        borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: false,
+                        scales: {
+                        xAxes: [{
+                            ticks: {
+                            maxRotation: 90,
+                            minRotation: 80
+                            },
+                            gridLines: {
+                            offsetGridLines: true // à rajouter
+                            }
+                        },
+                        {
+                            position: "top",
+                            ticks: {
+                            maxRotation: 90,
+                            minRotation: 80
+                            },
+                            gridLines: {
+                            offsetGridLines: true // et matcher pareil ici
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                            beginAtZero: true
+                            }
+                        }]
+                        }
+                    }
+                }
+
+                if(typeof Graph ==="undefined"){
+                    window.Graph = new Chart(ctx, Graph_config);
+
+                }else{
+                    //updating with new chart data
+                    window.Graph.config=Graph_config;
+                    //redraw the chart
+                    window.Graph.update();
+                }
+                
+            });
 
             //alert(id_purpose);
             $.post("<?=base_url()?>task/get_progress_task",

@@ -63,7 +63,7 @@ class Json_print extends CI_Controller {
                 'purpose' => $dt_pp->purpose,
                 'helper' => '<a href="" class="btn btn-sm btn-primary">'.$get_helper->num_rows().' Helper</a>',
                 'action' => '<a href="'.base_url().'purpose/add_helper/'.base64_encode($dt_pp->id).'" class="btn btn-sm btn-success"><i class="fa fa-plus"></i> Helper</a>',
-                'progress' => round($total_progress, 2).' %',
+                'progress' => round($total_progress, 1).' %',
                 'start' => date('d M Y', strtotime($dt_pp->start_date)),
                 'end' => date('d M Y', strtotime($dt_pp->end_date)),
                 'interval' => $years.' Tahun '. $months.' Bulan '. $days.' Hari'
@@ -83,40 +83,84 @@ class Json_print extends CI_Controller {
 
         header('content-type:application/json');
 
-        $param = array(
-			'table' => array(
-			  'SP_TASK_PURPOSE',
-			  'SP_PURPOSE', 
-			  'SP_TASK_PROGRESS'
-			),
-			'field' => array(
-			  'id_purpose',
-			  'id', 
-			  'id_task',
-			),
-			'table_join_key' => array(
-			  '1_0', 
-			  '2_0'
-			),
-			'field_join_key' => array(
-				'1_0',
-				'2_1'
-			)
-        );
+        if(isset($_GET['id_purpose'])){
 
-        $where = array(
-            'email_helper' => $this->session->userdata('data_user')[0]['email']
-        );
+            $id_purpose = isset($_GET['id_purpose']) ? $_GET['id_purpose'] : '';
 
-        $select = 'SP_TASK_PURPOSE.*, SP_TASK_PURPOSE.comment as task_comment, SP_PURPOSE.*, SP_TASK_PROGRESS.*, SP_TASK_PURPOSE.attachment as attachment_task, SP_TASK_PURPOSE.start_date as task_start, SP_TASK_PURPOSE.end_date as task_finish';
+            $param = array(
+                'table' => array(
+                  'SP_TASK_PURPOSE',
+                  'SP_PURPOSE', 
+                  'SP_TASK_PROGRESS'
+                ),
+                'field' => array(
+                  'id_purpose',
+                  'id', 
+                  'id_task',
+                ),
+                'table_join_key' => array(
+                  '1_0', 
+                  '2_0'
+                ),
+                'field_join_key' => array(
+                    '1_0',
+                    '2_1'
+                )
+            );
+    
+            $where = array(
+                'email_helper' => $this->session->userdata('data_user')[0]['email'],
+                'SP_TASK_PURPOSE.id_purpose' => $id_purpose
+            );
+    
+            $select = 'SP_TASK_PURPOSE.*, SP_TASK_PURPOSE.comment as task_comment, SP_PURPOSE.*, SP_TASK_PROGRESS.*, SP_TASK_PURPOSE.attachment as attachment_task, SP_TASK_PURPOSE.start_date as task_start, SP_TASK_PURPOSE.end_date as task_finish';
+    
+            $task_count = $this->M_crud->join_multiple_table($param, $where, 'SP_TASK_PURPOSE.id', '', '', $select);
+    
+            $total_task = count($task_count->result());
+    
+            $offset = $this->input->post('start') ? $this->input->post('start') : 0;
+    
+            $task_paging = $this->M_crud->join_multiple_table($param, $where, 'SP_TASK_PURPOSE.id', $offset, '10', $select);
 
-        $task_count = $this->M_crud->join_multiple_table($param, $where, 'SP_TASK_PURPOSE.id', '', '', $select);
+        }else{
 
-        $total_task = count($task_count->result());
+            $param = array(
+                'table' => array(
+                  'SP_TASK_PURPOSE',
+                  'SP_PURPOSE', 
+                  'SP_TASK_PROGRESS'
+                ),
+                'field' => array(
+                  'id_purpose',
+                  'id', 
+                  'id_task',
+                ),
+                'table_join_key' => array(
+                  '1_0', 
+                  '2_0'
+                ),
+                'field_join_key' => array(
+                    '1_0',
+                    '2_1'
+                )
+            );
+    
+            $where = array(
+                'email_helper' => $this->session->userdata('data_user')[0]['email']
+            );
+    
+            $select = 'SP_TASK_PURPOSE.*, SP_TASK_PURPOSE.comment as task_comment, SP_PURPOSE.*, SP_TASK_PROGRESS.*, SP_TASK_PURPOSE.attachment as attachment_task, SP_TASK_PURPOSE.start_date as task_start, SP_TASK_PURPOSE.end_date as task_finish';
+    
+            $task_count = $this->M_crud->join_multiple_table($param, $where, 'SP_TASK_PURPOSE.id', '', '', $select);
+    
+            $total_task = count($task_count->result());
+    
+            $offset = $this->input->post('start') ? $this->input->post('start') : 0;
+    
+            $task_paging = $this->M_crud->join_multiple_table($param, $where, 'SP_TASK_PURPOSE.id', $offset, '10', $select);
 
-        $offset = $this->input->post('start') ? $this->input->post('start') : 0;
-
-        $task_paging = $this->M_crud->join_multiple_table($param, $where, 'SP_TASK_PURPOSE.id', $offset, '10', $select);
+        }
         //$task_paging = $this->M_crud->join_2_table('SP_TASK_PURPOSE', 'SP_PURPOSE', 'id_purpose', 'id', '', 'SP_TASK_PURPOSE.id', $offset, '10', $select);
 
         $data = array(
@@ -175,6 +219,8 @@ class Json_print extends CI_Controller {
 
         $helper_paging = $this->M_crud->join_2_table('SP_PURPOSE_HELPER', 'SP_USER', 'email_helper', 'email', $where, '', $offset, '10', '');
 
+        $tt = $this->M_crud->get_where('SP_TASK_PURPOSE', array('id_purpose' => $id_purpose))->num_rows();
+
         $data = array(
             'response_real'=>$helper_paging->result(),
             'recordsTotal' => $total_helper,
@@ -182,29 +228,65 @@ class Json_print extends CI_Controller {
             'data' => array()
         );
 
-        foreach($helper_paging->result() as $dt_helper){
+        foreach ($helper_paging->result() as $key => $dt_helper) {
+
+            $get_task = $this->M_crud->get_where('SP_TASK_PURPOSE', array('id_purpose' => $id_purpose, 'email_helper' => $dt_helper->email_helper));
+            $nr_get_task = $get_task->num_rows();
+
 
             $query_get_progress = $this->M_crud->get_progress_every_helper($dt_helper->id_purpose, $dt_helper->email_helper);
-
-            $total_task = $query_get_progress->num_rows();
-
-            $progress = $query_get_progress->num_rows() < 1 ? 0 : $query_get_progress->row()->progress;
             
-            $hitung = $total_task == 0 ? '0' : (100/$total_task);
+            $hitung = $nr_get_task == 0 ? '0' : (100/$nr_get_task);
+
+            $progress = 0;
+            foreach ($query_get_progress->result() as $key => $value) {
+                $progress += $value->progress;
+            }
+
+            $progress_each_helper = ($progress/100)*$hitung;
+
+            $data['data'][] = array(
+                'total_task' => $nr_get_task,
+                'hitung' => $hitung,
+                'progress_hitung' => $progress,
+                'persentasi' => ($progress/100)*$hitung,
+                'id_purpose' => $dt_helper->id_purpose,
+                'email' => $dt_helper->email_helper,
+                'name' => $dt_helper->first_name.' '.$dt_helper->last_name,
+                'progress' => round($progress_each_helper, 1). ' %',
+                'action' => '
+                <a class="btn btn-sm btn-info text-white view-task" param="'.base64_encode($dt_helper->id_purpose.'_'.$dt_helper->email_helper).'"><i class="fa fa-eye"></i> Task</a>
+                <a class="btn btn-sm btn-danger text-white delete" id-purpose="'.$dt_helper->id_purpose.'" email-helper="'.$dt_helper->email_helper.'"><i class="fa fa-trash"></i> Helper</a>
+                '
+            );
+            
+        }
+
+        /*foreach($helper_paging->result() as $dt_helper){
+
+            $query_get_progress = $this->M_crud->get_progress_every_helper($dt_helper->id_purpose, $dt_helper->email_helper);
+            
+            $hitung = $tt == 0 ? '0' : (100/$tt);
+
+            $progress = 0;
+            foreach ($query_get_progress->result() as $key => $value) {
+                $progress += $query_get_progress->num_rows() < 1 ? 0 : $query_get_progress->row()->progress;
+            }
+
             $progress_each_helper = ($progress/100)*$hitung;
 
             $data['data'][] = array(
                 'id_purpose' => $dt_helper->id_purpose,
                 'email' => $dt_helper->email_helper,
                 'name' => $dt_helper->first_name.' '.$dt_helper->last_name,
-                'progress' => $progress_each_helper. ' %',
+                'progress' => round($progress_each_helper, 2). ' %',
                 'action' => '
                 <a class="btn btn-sm btn-info text-white view-task" param="'.base64_encode($dt_helper->id_purpose.'_'.$dt_helper->email_helper).'"><i class="fa fa-eye"></i> Task</a>
                 <a class="btn btn-sm btn-danger text-white delete" id-purpose="'.$dt_helper->id_purpose.'" email-helper="'.$dt_helper->email_helper.'"><i class="fa fa-trash"></i> Helper</a>
                 '
             );
 
-        }
+        }*/
 
         echo json_encode($data, JSON_PRETTY_PRINT);
 
@@ -337,7 +419,112 @@ class Json_print extends CI_Controller {
 
         echo json_encode($data, JSON_PRETTY_PRINT);
 
-	}
+    }
+    
+    public function getDataHistoryProgress(){
+
+        header('content-type:application/json');
+
+        $this->load->model('M_crud');
+
+        $id_purpose = $this->input->post('id_purpose');
+        $id_task = $this->input->post('id_task');
+
+        //$rgbColor = array();
+
+        //Create a loop.
+        foreach(array('r', 'g', 'b', 'a') as $color){
+            //Generate a random number between 0 and 255.
+            $rgbColor[$color] = mt_rand(0, 255);
+        }
+
+        $data = array(
+            'label' => array(),
+            'data' => array()
+        );
+
+        $getProgressTask = $this->M_crud->get_where('SP_TASK_PROGRESS_LOG', array('id_purpose' => $id_purpose, 'id_task' => $id_task));
+
+        foreach ($getProgressTask->result() as $key => $value) {
+
+            $data['label'][] = date('d M Y H:i:s', strtotime($value->add_at));
+
+            $data['data'][] = $value->progress;
+
+            $data['rand'][] = $rgbColor;
+
+            $data['color'][] = $this->rand_color();
+
+        }
+
+        echo json_encode($data, JSON_PRETTY_PRINT);
+
+    }
+
+    function rand_color() {
+        return '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+    }
+
+    public function history_purpose(){
+        $this->load->model('M_crud');
+
+        header('content-type:application/json');
+
+        $where = array(
+            'status' => 1
+        );
+    
+        $purpose_count = $this->M_crud->get_where('SP_PURPOSE', $where);
+        $total_purpose = count($purpose_count->result());
+
+        $offset = $this->input->post('start') ? $this->input->post('start') : 0;
+
+        $purpose_paging = $this->M_crud->get_where('SP_PURPOSE', $where, $offset, '10');
+
+        $data = array(
+            'response_real'=>$purpose_paging->result(),
+            'recordsTotal' => $total_purpose,
+            'recordsFiltered' => $total_purpose,
+            'data' => array()
+        );
+
+        $i=1;
+        $array_progress = array();
+        foreach($purpose_paging->result() as $dt_pp){
+
+            $select = 'MIN(start_date) as real_start, MAX(end_date) as real_finish';
+            $getSETask = $this->M_crud->get_where('SP_TASK_PURPOSE', array('id_purpose' => $dt_pp->id), '', '', $select);
+
+            $real_start = $getSETask->row()->real_start;
+            $real_finish = $getSETask->row()->real_finish;
+
+            $diff_est = abs(strtotime($dt_pp->end_date) - strtotime($dt_pp->start_date));
+            $years_est = floor($diff_est / (365*60*60*24));
+            $months_est = floor(($diff_est - $years_est * 365*60*60*24) / (30*60*60*24));
+            $days_est = floor(($diff_est - $years_est * 365*60*60*24 - $months_est*30*60*60*24)/ (60*60*24));
+
+            $diff = abs(strtotime($real_finish) - strtotime($real_start));
+            $years = floor($diff / (365*60*60*24));
+            $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+            $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+
+            $data['data'][] = array(
+                'id' => $dt_pp->id,
+                'purpose' => $dt_pp->purpose,
+                'est_start' => date("d M Y", strtotime($dt_pp->start_date)),
+                'est_end' => date("d M Y", strtotime($dt_pp->end_date)),
+                'est_interval' => $years_est.' Tahun '. $months_est.' Bulan '. $days_est.' Hari',
+                'start' => $real_start,
+                'finish' => $real_finish,
+                'interval' => $years.' Tahun '. $months.' Bulan '. $days.' Hari',
+            );
+
+            $i++;
+
+        }
+
+        echo json_encode($data, JSON_PRETTY_PRINT);
+    }
 
 
 }

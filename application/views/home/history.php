@@ -1,11 +1,9 @@
-
-
 <link rel="stylesheet" type="text/css" href="<?=base_url()?>assets/template/vendor/datatable/css/datatables.min.css">
 
 <div class="col-md-12 col-sm-4">
   <div class="x_panel tile">
     <div class="x_title">
-      <h2>Preview | My Task</h2>
+      <h2>History | My Purpose</h2>
       <ul class="nav navbar-right panel_toolbox">
         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
         </li>
@@ -24,31 +22,16 @@
             <?=$this->session->flashdata('message')?>
         </div>
 
-        <form class="form-filter">
-          <div class="col-md-4">
-              <select name="id_purpose" id="id_purpose" class="form-control">
-                  <option disabled selected>Pilih Purpose</option>
-                  <?php
-                      foreach ($purpose as $key => $value) {
-                          echo '<option value="'.$value->id.'">'.$value->purpose.'</option>';
-                      }
-                  ?>
-              </select>
-          </div>
-          <div class="col-md-4">
-            <button class="btn btn-primary">Search</button>
-          </div>
-        </form>
-
-        <table class="table table-borderless text-center" id="table_task">
+        <table class="table table-borderless text-center" id="table_history">
             <thead>
                 <tr>
                     <th>Purpose</th>
-                    <th>Task</th>
-                    <th>Comment</th>
-                    <th>Durasi</th>
-                    <th>Progress</th>
-                    <th>Attachment</th>
+                    <th>Est Start</th>
+                    <th>Est End</th>
+                    <th>Est Interval</th>
+                    <th>Real Start</th>
+                    <th>Real End</th>
+                    <th>Real Interval</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,5 +44,5 @@
 
 </div>
 
-<script type="text/javascript" src="<?=base_url()?>assets/js/preview_task.js"></script>
+<script type="text/javascript" src="<?=base_url()?>assets/js/preview_history.js"></script>
 <script type="text/javascript" src="<?=base_url()?>assets/template/vendor/datatable/js/datatables.min.js"></script>

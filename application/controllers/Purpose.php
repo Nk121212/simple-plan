@@ -153,6 +153,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
          	redirect('purpose/view_purpose');
 		}
 
+		public function history(){
+			$data = array('main' => 'home/history');
+			$this->load->view('home/home', $data);
+		}
+
 	}
 
 ?>

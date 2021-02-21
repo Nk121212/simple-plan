@@ -90,6 +90,11 @@
                       <li><a href="<?=base_url()?>task/update_task">Progress Task</a></li>
                     </ul>
                   </li>
+                  <li><a><i class="fa fa-history"></i> History <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="<?=base_url()?>purpose/history">My History</a></li>
+                    </ul>
+                  </li>
                   <!--li><a><i class="fa fa-file"></i> Draft <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="form.html">Ask For Help</a></li>
@@ -256,6 +261,8 @@
 
     <script type="text/javascript" src="<?=base_url()?>assets/template/vendor/sweetalert/js/sweetalert.min.js"></script>
 
+    <script type="text/javascript" src="<?=base_url()?>assets/js/global_function.js"></script>
+
     <script type="text/javascript">
 
       $(document).ready(function(){
@@ -275,15 +282,20 @@
         })
 
         $('.maxHundred').keyup(function(){
-          var this_val = $(this).val();
-          if(this_val > 100){
-            //alert(this_val);
-            $(this).val('100');
-            return false;
-          }else{
 
-          }
+            var this_val = $(this).val();
+
+            if(this_val > 100){
+              //alert(this_val);
+              $(this).val('100');
+              return false;
+            }else{
+
+            }
+
         })
+
+        $('form').preventDoubleSubmission();
 
       })
 

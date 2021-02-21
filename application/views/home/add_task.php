@@ -1,3 +1,9 @@
+<style>
+    .fs-big{
+        font-size : large;
+        margin-top: 10px;
+    }
+</style>
 <div class="col-md-12 col-sm-4 ">
   <div class="x_panel tile">
     <div class="x_title">
@@ -33,6 +39,9 @@
                                 }
                             ?>
                         </select>
+                    </div>
+                    <div class="col-md-12 text-center" id="myTask">
+                        
                     </div>
                     <div class="col-md-12">
                         <hr>
@@ -103,6 +112,25 @@
                 alert('End Date tidak boleh kurang dari Start Date !');
                 $("#end_date").val("");
             }
+        })
+
+        $('#id_purpose').change(function(){
+
+            $("#myTask").html("");
+            //alert($(this).val());
+            var id_purpose = $(this).val();
+
+            $.post("<?=base_url()?>task/getMyTask",
+            {
+                id_purpose: id_purpose,
+            },
+            function(response){
+                console.log(response);
+                $('#myTask').append('<h3>List My Task</h3>');
+                $.each(response, function(i, task){
+                    $('#myTask').append('<span class="badge badge-primary fs-big">'+task.task+'</span>&nbsp;&nbsp;&nbsp;&nbsp;');
+                });
+            });
         })
 
     })

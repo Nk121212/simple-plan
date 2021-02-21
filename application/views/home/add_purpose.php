@@ -55,7 +55,7 @@
                     <div class="col-md-6">
                         <hr>
                         <label for="">Attachment :</label>
-                        <input type="file" name="upload" class="form-control" required>
+                        <input type="file" name="upload" class="form-control">
                     </div>
                     <div class="col-md-12">
                         <hr>
@@ -70,7 +70,7 @@
                     </div>
                     <div class="col-md-12">
                         <hr>
-                        <textarea class="form-control" placeholder="Comment" name="comment" required><?=!empty($purpose_data) ? $purpose_data[0]['comment'] : ''?></textarea>
+                        <textarea class="form-control" placeholder="Comment" name="comment"><?=!empty($purpose_data) ? $purpose_data[0]['comment'] : ''?></textarea>
                     </div>
                     <div class="col-md-6">
                         <hr>

@@ -3,9 +3,9 @@ $(function () {
 	var pathparts = location.pathname.split('/');
     var base_url = location.origin+'/'+pathparts[1].trim('/')+'/';
 
-	var dataTable = $('#table_task').DataTable( {
+	var dataTable = $('#table_history').DataTable( {
 	    ajax: {
-	        url: base_url+"json_print/list_task",
+	        url: base_url+"json_print/history_purpose",
 	        data: function(data){
 
 	        },
@@ -29,13 +29,14 @@ $(function () {
 	    serverSide: true,
 	    serverMethod: 'post',
 	    columns: [
-	    	{data: "purpose"},
-	        {data: "task"},
-			{data: "comment"},
+	        {data: "purpose"},
+			{data: "est_start"},
+			{data: "est_end"},
+            {data: "est_interval"},
+			{data: "start"},
+			{data: "finish"},
 			{data: "interval"},
-			{data: "progress"},
-			{data: "attachment"},
-	        //{data: "action", orderable:false, className: "dt-body-center"}
+			
 	    ]
 	});
 
@@ -52,13 +53,13 @@ $(function () {
 	    var formData = new FormData(this);
 
 	    //var status = $('#status').val();
-	    var id_purpose = $('#id_purpose').val();
+	    var search = $('#search').val();
 
-	    $('#table_task').dataTable().fnDestroy();
+	    $('.table-activity').dataTable().fnDestroy();
 
-	    $('#table_task').DataTable( {
+	    $('.table-activity').DataTable( {
 	        ajax: {
-	            url: base_url+'json_print/list_task?id_purpose='+id_purpose+'',
+	            url: base_url+'ajax/document/type.json?search='+search+'',
 	            data: function(data){
 	                console.log(data);
 	                //data.search.role = $("#role").val();
@@ -92,12 +93,11 @@ $(function () {
 	        serverSide: true,
 	        serverMethod: 'post',
 	        columns: [
-	            {data: "purpose"},
-				{data: "task"},
-				{data: "comment"},
-				{data: "interval"},
-				{data: "progress"},
-				{data: "attachment"},
+	            {data: "no", orderable:false, width: "30px", className: "dt-body-center"},
+	            {data: "title"},
+	            {data: "desc"},
+	            {data: "image"},
+	            {data: "action", orderable:false, className: "dt-body-center"}
 	        ]
 	    });
 

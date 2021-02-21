@@ -119,7 +119,7 @@
                           echo '
                             <tr>
                               <td>'.$value['purpose'].'</td>
-                              <td><a href="'.base_url().'task/task_by_helper/'.base64_encode($value['id_purpose']).'" class="btn btn-sm btn-primary">'.$value['total_task'].' Task</a></td>
+                              <td>'.$value['total_task'].'</td>
                               <td>'.$value['progress'].' %</td>
                               <td>'.$value['start'].'</td>
                               <td>'.$value['end'].'</td>

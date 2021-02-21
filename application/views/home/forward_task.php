@@ -1,3 +1,10 @@
+<style>
+    .fs-big{
+        font-size : large;
+        margin-top: 10px;
+    }
+</style>
+
 <div class="col-md-12 col-sm-4 ">
   <div class="x_panel tile">
     <div class="x_title">
@@ -46,6 +53,10 @@
                         </select>
                     </div>
 
+                    <div class="col-md-12 text-center" id="myTask">
+                        
+                    </div>
+
                     <div class="col-md-12">
                         <hr>
                         <textarea class="form-control" name="task" placeholder="Task Description" required></textarea>
@@ -73,16 +84,16 @@
                     <div class="col-md-6">
                         <hr>
                         <label for="">Rating :</label>
-                        <input type="text" name="rating" class="star-rating rating-loading" value="0" data-size="md" title="" required>
+                        <input type="text" name="rating" class="star-rating rating-loading" value="0" data-size="md" title="">
                     </div>
                     <div class="col-md-6">
                         <hr>
                         <label for="">Attachment :</label>
-                        <input type="file" name="upload" class="form-control" required>
+                        <input type="file" name="upload" class="form-control">
                     </div>
                     <div class="col-md-12">
                         <hr>
-                        <textarea class="form-control" placeholder="Comment" name="comment" required></textarea>
+                        <textarea class="form-control" placeholder="Comment" name="comment"></textarea>
                     </div>
                     <div class="col-md-6">
                         <hr>
@@ -117,6 +128,27 @@
                 alert('End Date tidak boleh kurang dari Start Date !');
                 $("#end_date").val("");
             }
+        })
+
+        $('#email_helper').change(function(){
+
+            $("#myTask").html("");
+            //alert($(this).val());
+            var email_helper = $(this).val();
+            var id_purpose = $('#id_purpose').val();
+
+            $.post("<?=base_url()?>task/getMyTask",
+            {
+                id_purpose: id_purpose,
+                email_helper : email_helper
+            },
+            function(response){
+                console.log(response);
+                $('#myTask').append('<h3>List '+email_helper+' Task</h3>');
+                $.each(response, function(i, task){
+                    $('#myTask').append('<span class="badge badge-primary fs-big">'+task.task+'</span>&nbsp;&nbsp;&nbsp;&nbsp;');
+                });
+            });
         })
 
     })

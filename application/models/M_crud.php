@@ -61,9 +61,9 @@ class M_crud extends CI_Model{
 
 	}
 
-	public function get_where($table, $where, $offset='', $limit=''){
+	public function get_where($table, $where, $offset='', $limit='', $select=''){
 
-		$this->db->select('*');
+		$this->db->select($select == '' ? '*' : $select);
 		$this->db->from($table);
 		$this->db->where($where);
 		$is_limit = ($offset == '' || $limit == '') ? '' : $this->db->limit($limit, $offset);
@@ -84,9 +84,10 @@ class M_crud extends CI_Model{
 		$this->db->delete($table);
 	}
 
-	public function get_where_in($table, $field_in, $value_field_in){
+	public function get_where_in($table, $field_in, $value_field_in, $where=''){
 		$this->db->select('*');
 		$this->db->from($table);
+		$where == '' ? '' : $this->db->where($where);
 		$this->db->where_in($field_in, $value_field_in);
 		$query = $this->db->get();
 		return $query;
@@ -146,11 +147,30 @@ class M_crud extends CI_Model{
 
 	}
 
+	public function dinamicUpdate($table, $setData, $where){
+
+		$data = xssPrevent($setData);
+		
+		$this->db->where($where);
+		$this->db->update($table, $data);
+
+		return $this;
+
+	}
+
 	public function get_progress_every_helper($id_purpose, $email_helper){
 		$this->db->select('*');
 		$this->db->from('SP_TASK_PURPOSE');
 		$this->db->join('SP_TASK_PROGRESS', 'SP_TASK_PURPOSE.id_purpose = SP_TASK_PROGRESS.id_purpose AND SP_TASK_PURPOSE.id = SP_TASK_PROGRESS.id_task');
 		$this->db->where(array('SP_TASK_PURPOSE.id_purpose' => $id_purpose, 'SP_TASK_PURPOSE.email_helper' => $email_helper));
+		return $this->db->get();
+	}
+
+	public function get_progress_all_task($id_purpose){
+		$this->db->select('*');
+		$this->db->from('SP_TASK_PURPOSE');
+		$this->db->join('SP_TASK_PROGRESS', 'SP_TASK_PURPOSE.id = SP_TASK_PROGRESS.id_task AND SP_TASK_PURPOSE.id_purpose = SP_TASK_PROGRESS.id_purpose');
+		$this->db->where(array('SP_TASK_PURPOSE.id_purpose' => $id_purpose));
 		return $this->db->get();
 	}
 
