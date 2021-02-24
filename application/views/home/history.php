@@ -32,6 +32,7 @@
                     <th>Real Start</th>
                     <th>Real End</th>
                     <th>Real Interval</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>

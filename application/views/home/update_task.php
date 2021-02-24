@@ -199,16 +199,6 @@
                             gridLines: {
                             offsetGridLines: true // à rajouter
                             }
-                        },
-                        {
-                            position: "top",
-                            ticks: {
-                            maxRotation: 90,
-                            minRotation: 80
-                            },
-                            gridLines: {
-                            offsetGridLines: true // et matcher pareil ici
-                            }
                         }],
                         yAxes: [{
                             ticks: {

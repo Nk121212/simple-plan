@@ -36,6 +36,7 @@ $(function () {
 			{data: "start"},
 			{data: "finish"},
 			{data: "interval"},
+			{data: "action"},
 			
 	    ]
 	});

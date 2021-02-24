@@ -471,6 +471,7 @@ class Json_print extends CI_Controller {
         header('content-type:application/json');
 
         $where = array(
+            'email_user' => $this->session->userdata('data_user')[0]['email'],
             'status' => 1
         );
     
@@ -489,11 +490,11 @@ class Json_print extends CI_Controller {
         );
 
         $i=1;
-        $array_progress = array();
+        //$array_progress = array();
         foreach($purpose_paging->result() as $dt_pp){
 
-            $select = 'MIN(start_date) as real_start, MAX(end_date) as real_finish';
-            $getSETask = $this->M_crud->get_where('SP_TASK_PURPOSE', array('id_purpose' => $dt_pp->id), '', '', $select);
+            $select = 'MIN(add_at) as real_start, MAX(add_at) as real_finish';
+            $getSETask = $this->M_crud->get_where('SP_TASK_PROGRESS_LOG', array('id_purpose' => $dt_pp->id), '', '', $select);
 
             $real_start = $getSETask->row()->real_start;
             $real_finish = $getSETask->row()->real_finish;
@@ -514,9 +515,10 @@ class Json_print extends CI_Controller {
                 'est_start' => date("d M Y", strtotime($dt_pp->start_date)),
                 'est_end' => date("d M Y", strtotime($dt_pp->end_date)),
                 'est_interval' => $years_est.' Tahun '. $months_est.' Bulan '. $days_est.' Hari',
-                'start' => $real_start,
-                'finish' => $real_finish,
+                'start' => date('d M Y', strtotime($real_start)),
+                'finish' => date('d M Y', strtotime($real_finish)),
                 'interval' => $years.' Tahun '. $months.' Bulan '. $days.' Hari',
+                'action' => '<a target="_blank" href="'.base_url().'purpose/pdf_history/'.base64_encode($dt_pp->id).'" class="btn btn-sm btn-danger"><i class="fa fa-file-pdf-o"></i></a>'
             );
 
             $i++;

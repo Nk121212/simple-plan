@@ -158,6 +158,68 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			$this->load->view('home/home', $data);
 		}
 
+		public function pdf_history($id_purpose){
+
+			$this->load->model('M_crud');
+			//echo $id_purpose;
+			$dc_id_purpose = base64_decode($id_purpose);
+
+			$where = array(
+				'id' => $dc_id_purpose
+			);
+		
+			$purpose_query = $this->M_crud->get_where('SP_PURPOSE', $where);
+
+			$data_purpose = array();
+			foreach ($purpose_query->result() as $key => $value) {
+
+				$select = 'MIN(add_at) as real_start, MAX(add_at) as real_finish';
+				$getSETask = $this->M_crud->get_where('SP_TASK_PROGRESS_LOG', array('id_purpose' => $value->id), '', '', $select);
+
+				$totalTask = $this->M_crud->get_where('SP_TASK_PURPOSE', array('id_purpose' => $value->id));
+
+				$real_start = $getSETask->row()->real_start;
+				$real_finish = $getSETask->row()->real_finish;
+
+				$diff_est = abs(strtotime($value->end_date) - strtotime($value->start_date));
+				$years_est = floor($diff_est / (365*60*60*24));
+				$months_est = floor(($diff_est - $years_est * 365*60*60*24) / (30*60*60*24));
+				$days_est = floor(($diff_est - $years_est * 365*60*60*24 - $months_est*30*60*60*24)/ (60*60*24));
+
+				$diff = abs(strtotime($real_finish) - strtotime($real_start));
+				$years = floor($diff / (365*60*60*24));
+				$months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+				$days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+
+				$getHelper =  $this->M_crud->get_where('SP_PURPOSE_HELPER', array('id_purpose' => $value->id));
+
+				$all_helper = array();
+				foreach ($getHelper->result() as $key => $dtHelper) {
+					$getDataHelper = $this->M_crud->get_where('SP_USER', array('email' => $dtHelper->email_helper));
+					$all_helper[] = $getDataHelper->result_array();
+				}
+
+				$data_purpose[] = array(
+					'id_purpose' => $value->id,
+					'purpose' => $value->purpose,
+					'est_start' => date('d M Y', strtotime($value->start_date)),
+					'est_finish' => date('d M Y', strtotime($value->end_date)),
+					'est_interval' => $years_est.' Tahun '. $months_est.' Bulan '. $days_est.' Hari',
+					'real_start' => date('d M Y', strtotime($real_start)),
+					'real_finish' => date('d M Y', strtotime($real_finish)),
+					'real_interval' => $years.' Tahun '. $months.' Bulan '. $days.' Hari',
+					'image_purpose' => $value->attachment,
+					'total_task' => $totalTask
+				);
+
+			}
+
+			//print_r($all_helper);
+			$data = array('data_purpose' => $data_purpose, 'data_helper' => $all_helper);
+			$this->load->view('home/pdf_history', $data);
+
+		}
+
 	}
 
 ?>

@@ -120,7 +120,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			if (empty($id_purpose_by_helper)){
 				$list_purpose = array();
 			} else {
-				$my_purpose = $this->M_crud->get_where_in('SP_PURPOSE', 'id', $id_purpose_by_helper);
+				$my_purpose = $this->M_crud->get_where_in('SP_PURPOSE', 'id', $id_purpose_by_helper, array('status' => 0));
 				$list_purpose = $my_purpose->result();
 
 			}
